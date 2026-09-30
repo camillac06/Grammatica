@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Giocare nel Medioevo – Esercizi di morfologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,600;0,800;1,400&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9EBE0; --paper:#FBFBF6; --ink:#2A221B; --muted:#6B5F52; --line:#D3D0BF;
+  --red:#A8342A; --red-soft:#F3DCD6; --ochre:#9A6E16; --blue:#35566F; --blue-soft:#DCE6EE;
+  --ok:#2E6A38; --ok-soft:#DDEBDD; --no:#A8342A; --no-soft:#F6DFDA; --warn:#8A6512; --warn-soft:#F4EAD2;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B1A17; --paper:#25231F; --ink:#EDE6DA; --muted:#A99D8D; --line:#3B362F;
+    --red:#E3806F; --red-soft:#4A2723; --ochre:#D9AE55; --blue:#93B7D3; --blue-soft:#243441;
+    --ok:#86C792; --ok-soft:#1F3524; --no:#E3806F; --no-soft:#46251F; --warn:#DDB45E; --warn-soft:#3B311C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B1A17; --paper:#25231F; --ink:#EDE6DA; --muted:#A99D8D; --line:#3B362F;
+  --red:#E3806F; --red-soft:#4A2723; --ochre:#D9AE55; --blue:#93B7D3; --blue-soft:#243441;
+  --ok:#86C792; --ok-soft:#1F3524; --no:#E3806F; --no-soft:#46251F; --warn:#DDB45E; --warn-soft:#3B311C;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Alegreya Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+h1,h2,h3,.serif{font-family:"Alegreya",Georgia,"Times New Roman",serif}
+header.hero{padding:18px 0 22px}
+.hero .mod{color:var(--muted);font-size:15px;margin:0 0 6px}
+.hero h1{font-size:clamp(40px,9vw,64px);line-height:1;margin:0 0 12px;font-weight:800;letter-spacing:-.01em}
+.hero p{margin:0;color:var(--muted);max-width:56ch}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:20px 20px}
+.student{display:grid;grid-template-columns:1fr 130px;gap:12px;margin-bottom:28px}
+.student label{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
+input[type=text],textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%}
+textarea{min-height:90px;resize:vertical;font-family:"Alegreya",Georgia,serif;font-size:17px}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,.w:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.reading{font-family:"Alegreya",Georgia,serif;font-size:18px;line-height:1.65;margin-bottom:36px}
+.reading h2{font-size:28px;margin:0 0 12px}
+.reading p{margin:0 0 .9em;max-width:68ch}
+details.reading summary{cursor:pointer;color:var(--blue);font-family:"Alegreya Sans",sans-serif;font-size:15px;margin-bottom:10px}
+h2.part{font-size:30px;margin:44px 0 14px;color:var(--red);font-weight:800}
+.ex{margin-bottom:18px}
+.ex h3{font-size:20px;margin:0 0 4px;line-height:1.3;display:flex;gap:10px}
+.ex h3 .n{color:var(--red);min-width:1.3em}
+.ex .hint{color:var(--muted);font-size:15px;margin:0 0 14px}
+.ex .score{font-family:"Alegreya Sans",sans-serif;font-size:14px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:auto;white-space:nowrap;align-self:flex-start}
+.score.good{background:var(--ok-soft);color:var(--ok)} .score.mid{background:var(--warn-soft);color:var(--warn)} .score.bad{background:var(--no-soft);color:var(--no)} .score.open{background:var(--blue-soft);color:var(--blue)}
+.pick{font-family:"Alegreya",Georgia,serif;font-size:17px;line-height:1.9;max-height:52vh;overflow:auto;border:1px solid var(--line);border-radius:4px;padding:10px 14px;background:var(--bg)}
+.pick p{margin:0 0 .7em}
+.w{cursor:pointer;border-radius:3px;padding:1px 1px;border:0;background:none;font:inherit;color:inherit}
+.w.sel{background:var(--red-soft);color:var(--red);box-shadow:inset 0 -2px 0 var(--red);font-weight:600}
+.done .w{cursor:default}
+.w.r-ok{background:var(--ok-soft);color:var(--ok);box-shadow:inset 0 -2px 0 var(--ok)}
+.w.r-no{background:var(--no-soft);color:var(--no);text-decoration:line-through}
+.w.r-miss{box-shadow:inset 0 0 0 2px var(--warn);color:var(--warn)}
+.chosen{font-size:15px;color:var(--muted);margin-top:10px}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.row .noun{font-family:"Alegreya",Georgia,serif;font-size:18px}
+.row .arrow{color:var(--muted)}
+.row input.art{width:64px}
+.row input.pl{flex:1;min-width:160px}
+.row input.adj{flex:1;min-width:150px}
+.row input.suf{width:90px}
+.row .lbl{min-width:96px;font-family:"Alegreya",Georgia,serif;font-size:18px}
+.row select{width:auto;min-width:190px}
+.ctx{font-family:"Alegreya",Georgia,serif;font-size:18px;flex:1;min-width:200px}
+.ctx b{color:var(--blue)}
+.fix{flex-basis:100%;font-size:14px;margin-top:-2px}
+.fix.ok{color:var(--ok)} .fix.no{color:var(--no)} .fix.warn{color:var(--warn)}
+input.ok,select.ok,textarea.ok{border-color:var(--ok);background:var(--ok-soft)}
+input.no,select.no{border-color:var(--no);background:var(--no-soft)}
+input.warn{border-color:var(--warn);background:var(--warn-soft)}
+.choices{display:flex;flex-direction:column;gap:8px}
+.choice{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:4px;cursor:pointer;background:var(--bg)}
+.choice input{margin-top:5px;accent-color:var(--red)}
+.choice.ok{border-color:var(--ok);background:var(--ok-soft)} .choice.no{border-color:var(--no);background:var(--no-soft)}
+.quote{font-family:"Alegreya",Georgia,serif;font-style:italic;border-left:3px solid var(--ochre);padding-left:12px;margin:0 0 12px}
+.note{font-size:14px;color:var(--muted);margin-top:8px}
+.submit{margin-top:40px;text-align:center}
+button.primary{font:inherit;font-weight:700;font-size:18px;background:var(--red);color:#fff;border:0;border-radius:6px;padding:14px 28px;cursor:pointer}
+button.secondary{font:inherit;font-weight:500;background:transparent;color:var(--blue);border:1px solid var(--blue);border-radius:6px;padding:10px 18px;cursor:pointer}
+button.link{font:inherit;font-size:14px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;margin-top:16px}
+.err{color:var(--no);font-size:15px;margin-top:10px;min-height:1.4em}
+#result{display:none;margin-top:36px}
+#result.show{display:block}
+.total{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.total .big{font-family:"Alegreya",Georgia,serif;font-size:56px;font-weight:800;line-height:1;color:var(--red)}
+.total .sub{color:var(--muted)}
+#report{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;min-height:220px;background:var(--bg)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.toast{font-size:14px;color:var(--ok);margin-top:8px;min-height:1.3em}
+@media (max-width:520px){
+  .student{grid-template-columns:1fr}
+  .card{padding:16px 14px}
+  .row .lbl{min-width:0;flex-basis:100%}
+  .row select{flex:1;min-width:0}
+}
+@media (prefers-reduced-motion:no-preference){ html{scroll-behavior:smooth} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="mod">Modulo C, morfologia: il nome, l’articolo, l’aggettivo, il pronome</p>
+    <h1>Giocare nel Medioevo</h1>
+    <p>Leggi il testo, poi svolgi gli esercizi. Quando hai finito premi “Consegna”: vedrai il punteggio e il resoconto da inviare all’insegnante.</p>
+  </header>
+
+  <section class="card student" aria-label="Dati dello studente">
+    <div><label for="sname">Nome e cognome</label><input type="text" id="sname" autocomplete="name"></div>
+    <div><label for="sclass">Classe</label><input type="text" id="sclass" placeholder="es. 2B"></div>
+  </section>
+
+  <details class="reading card" open>
+    <summary>Mostra o nascondi il testo</summary>
+    <h2>Giocare nel Medioevo</h2>
+    <div id="readingText"></div>
+  </details>
+
+  <main id="exercises"></main>
+
+  <div class="submit">
+    <button class="primary" id="btnSubmit">Consegna</button>
+    <div class="err" id="submitErr" role="alert"></div>
+  </div>
+
+  <section id="result" class="card" aria-live="polite">
+    <div class="total"><span class="big" id="bigScore"></span><span class="sub" id="subScore"></span></div>
+    <p class="note" style="margin-top:0">Le domande 9, 10 e 12 non hanno un punteggio automatico: le corregge l’insegnante. Copia il resoconto qui sotto e invialo nel modo indicato dall’insegnante (email, Classroom, registro).</p>
+    <textarea id="report" readonly aria-label="Resoconto"></textarea>
+    <div class="actions">
+      <button class="secondary" id="btnCopy">Copia il resoconto</button>
+      <button class="secondary" id="btnMail">Invia per email</button>
+      <button class="secondary" id="btnDownload" hidden>Scarica il resoconto</button>
+    </div>
+    <div class="toast" id="toast"></div>
+  </section>
+
+  <div style="text-align:center"><button class="link" id="btnReset">Cancella tutte le risposte e ricomincia</button></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Testo ---------- */
+var PARAS = [
+"Per molte persone il Medioevo è un periodo poco conosciuto, una misteriosa interruzione – lunga mille anni – tra la potenza dell’Impero romano e lo splendore del Rinascimento.",
+"Ancora meno nota è la condizione dei bambini in epoca medievale: sappiamo con certezza che la mortalità infantile era altissima e pochi sopravvivevano. Costoro saranno stati forse coccolati dai loro genitori, ma per breve tempo. Le femmine erano subito messe a lavorare in casa, i maschi già a sette-otto anni andavano a bottega o nei campi. Nessuna scuola, niente vacanze, pochi giochi.",
+"Eppure un dipinto di Pieter Bruegel, oggi al Kunsthistorisches Museum di Vienna, rappresenta circa ottanta giochi, usati da più di cento bambini. I personaggi non sono belli, né paffuti, né rosei: hanno piuttosto l’aria goffa di chi non è ancora del tutto umano.",
+"Tanti giochi sono conosciuti ancora oggi: mosca cieca, altalena, cavallina, trampoli, pentolaccia, bocce, trottole, oltre a bagni nel fiume, corsa, arrampicata sugli alberi e sugli steccati. Gli oggetti non sono costruiti apposta per il gioco: i cerchi sono quelli delle botti, i sassi si trovano per terra, le trottole e le girandole sono costruite dai bambini stessi con rami e legnetti. Per nuotare si usa come salvagente una vescica di maiale gonfiata, per giocare al commerciante una bilancia sottratta forse ai genitori.",
+"Certamente gli adulti sarebbero stati in grado di costruire giocattoli, ma non pensavano di sprecare tempo e fatica per prodotti che nessuno avrebbe comprato, perché il gioco stesso era considerato un inutile passatempo e l’età del gioco un trascurabile intervallo tra lo svezzamento e l’impiego nel lavoro."
+];
+var rt = document.getElementById("readingText");
+PARAS.forEach(function(p){ var el=document.createElement("p"); el.textContent=p; rt.appendChild(el); });
+
+/* ---------- Utilità ---------- */
+function norm(s){
+  return String(s||"").toLowerCase().replace(/[’‘`´]/g,"'").replace(/\s+/g," ").replace(/\s*'\s*/g,"'").replace(/^[\s.,;:!?"]+|[\s.,;:!?"]+$/g,"").trim();
+}
+function fem(list){ // aggiunge le forme femminili/plurali più comuni
+  var out=[]; list.forEach(function(w){ out.push(w);
+    if(/o$/.test(w)){ out.push(w.slice(0,-1)+"a"); out.push(w.slice(0,-1)+"i"); out.push(w.slice(0,-1)+"e"); }
+    if(/e$/.test(w)){ out.push(w.slice(0,-1)+"i"); }
+  }); return out;
+}
+function el(tag, attrs, html){ var e=document.createElement(tag); if(attrs) for(var k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html!=null) e.innerHTML=html; return e; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+/* ---------- Stato salvato (solo su questo dispositivo) ---------- */
+var KEY="medioevo-modC-v1";
+var state={};
+try{ state=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; }catch(e){ state={}; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+state.a = state.a || {};
+function bindInput(input, id){
+  if(state.a[id]!=null) input.value=state.a[id];
+  input.addEventListener("input", function(){ state.a[id]=input.value; save(); });
+  input.dataset.id=id;
+  return input;
+}
+["sname","sclass"].forEach(function(id){ bindInput(document.getElementById(id), id); });
+
+/* ---------- Dati esercizi ---------- */
+var EX3 = [
+  {n:"altalena", a:["l'"], ap:["le"], p:["altalene"]},
+  {n:"cavallina", a:["la"], ap:["le"], p:["cavalline"]},
+  {n:"trampolo", a:["il"], ap:["i"], p:["trampoli"]},
+  {n:"pentolaccia", a:["la"], ap:["le"], p:["pentolacce"]},
+  {n:"boccia", a:["la"], ap:["le"], p:["bocce"]},
+  {n:"trottola", a:["la"], ap:["le"], p:["trottole"]},
+  {n:"bagno", a:["il"], ap:["i"], p:["bagni"]},
+  {n:"corsa", a:["la"], ap:["le"], p:["corse"]},
+  {n:"arrampicata", a:["l'"], ap:["le"], p:["arrampicate"]},
+  {n:"gara con la biglia", a:["la"], ap:["le"], p:["gare con le biglie","gare con la biglia"]}
+];
+var EX4 = [
+  {n:"Maschio", opts:[["maschile","ile"]]},
+  {n:"Femmina", opts:[["femminile","ile"]]},
+  {n:"Medioevo", opts:[["medievale","ale"],["medioevale","ale"]]},
+  {n:"Morte", opts:[["mortale","ale"]]},
+  {n:"Vita", opts:[["vitale","ale"]]},
+  {n:"Fatica", opts:[["faticoso","oso"]]},
+  {n:"Gioco", opts:[["giocoso","oso"]]},
+  {n:"Lavoro", opts:[["lavorativo","ivo"],["laborioso","oso"]]}
+];
+var EX5 = [
+  ["una <b>misteriosa</b> interruzione","Q"],["lunga <b>mille</b> anni","N"],["per <b>molte</b> persone","I"],
+  ["la mortalità infantile era <b>altissima</b>","Q"],["circa <b>ottanta</b> giochi","N"],["<b>Tanti</b> giochi sono conosciuti","I"],
+  ["non sono belli, né <b>paffuti</b>","Q"],["più di <b>cento</b> bambini","N"],["<b>Nessuna</b> scuola","I"],
+  ["l’aria <b>goffa</b>","Q"],["a <b>sette</b>-otto anni","N"],["un <b>inutile</b> passatempo","Q"]
+];
+var EX5L = {Q:"qualificativo", I:"indefinito", N:"numerale"};
+var EX6 = [
+  ["e <b>pochi</b> sopravvivevano","PI"],["<b>Costoro</b> saranno stati forse coccolati","PD"],["niente vacanze, <b>pochi</b> giochi","AI"],
+  ["prodotti che <b>nessuno</b> avrebbe comprato","PI"],["i cerchi sono <b>quelli</b> delle botti","PD"],["per <b>molte</b> persone","AI"]
+];
+var EX6L = {PI:"pronome indefinito", AI:"aggettivo indefinito", PD:"pronome dimostrativo"};
+var EX7 = [
+  {n:"Misterioso", ok:["chiaro","noto","conosciuto","evidente","comprensibile","trasparente","svelato","palese","ovvio","risaputo"]},
+  {n:"Noto", ok:["sconosciuto","ignoto","ignorato","misconosciuto","oscuro","anonimo"]},
+  {n:"Altissimo", ok:["bassissimo","minimo","infimo"]},
+  {n:"Breve", ok:["lungo","lunghissimo","prolungato","duraturo","esteso","interminabile"]},
+  {n:"Goffo", ok:["agile","aggraziato","elegante","disinvolto","sciolto","leggiadro","armonioso","grazioso","abile","destro","coordinato","slanciato"]}
+];
+var PROPER = ["medioevo","impero","rinascimento","pieter","bruegel","kunsthistorisches","museum","vienna"];
+
+/* ---------- Costruzione pagina ---------- */
+var main=document.getElementById("exercises");
+var graders=[];
+function part(title){ main.appendChild(el("h2",{class:"part"},title)); }
+function exCard(n, title, hint){
+  var c=el("section",{class:"card ex",id:"ex"+n});
+  var h=el("h3",null,'<span class="n">'+n+'</span><span>'+title+'</span>');
+  var sc=el("span",{class:"score"}); sc.hidden=true; h.appendChild(sc);
+  c.appendChild(h);
+  if(hint) c.appendChild(el("p",{class:"hint"},hint));
+  main.appendChild(c); c._score=sc; return c;
+}
+function setScore(card, pts, max){
+  var s=card._score; s.hidden=false;
+  if(max==null){ s.textContent="la corregge l’insegnante"; s.className="score open"; return; }
+  s.textContent=pts+" / "+max;
+  var r=pts/max; s.className="score "+(r>=.8?"good":r>=.5?"mid":"bad");
+}
+function fixLine(parent, cls, text){ var f=el("div",{class:"fix "+cls}); f.textContent=text; parent.appendChild(f); }
+function choiceBlock(card, id, opts){
+  var box=el("div",{class:"choices",role:"radiogroup"});
+  opts.forEach(function(o,i){
+    var lab=el("label",{class:"choice"});
+    var r=el("input",{type:"radio",name:id,value:String(i)});
+    if(state.a[id]===String(i)) r.checked=true;
+    r.addEventListener("change",function(){ state.a[id]=r.value; save(); });
+    lab.appendChild(r); var t=el("span"); t.textContent=o; lab.appendChild(t); box.appendChild(lab);
+  });
+  card.appendChild(box); return box;
+}
+function gradeChoice(box, id, correct){
+  var v=state.a[id]; var labs=box.querySelectorAll(".choice");
+  labs[correct].classList.add("ok");
+  if(v!=null && Number(v)!==correct) labs[Number(v)].classList.add("no");
+  return Number(v)===correct;
+}
+
+/* ANALISI */
+part("Analisi");
+
+// 1 — nomi propri (tocca nel testo)
+(function(){
+  var c=exCard(1,"Quali sono i nomi propri presenti nel testo?","Tocca nel testo tutte le parole che fanno parte di un nome proprio. Tocca di nuovo per togliere la selezione. Attenzione: ogni parola sbagliata toglie un punto.");
+  var box=el("div",{class:"pick"}); var sel=new Set(state.a.ex1||[]);
+  var spans=[];
+  PARAS.forEach(function(p){
+    var pe=el("p");
+    p.split(/(\s+)/).forEach(function(tok){
+      if(/^\s+$/.test(tok)||tok===""){ pe.appendChild(document.createTextNode(tok)); return; }
+      var parts=tok.split(/([’'])/); // separa l’Impero
+      var pre="", word=tok;
+      if(parts.length===3){ pre=parts[0]+parts[1]; word=parts[2]; if(pre) pe.appendChild(document.createTextNode(pre)); }
+      var m=word.match(/^([^\p{L}]*)([\p{L}-]+)([^\p{L}]*)$/u);
+      if(!m){ pe.appendChild(document.createTextNode(word)); return; }
+      if(m[1]) pe.appendChild(document.createTextNode(m[1]));
+      var key=m[2].toLowerCase();
+      var b=el("button",{class:"w",type:"button"}); b.textContent=m[2]; b.dataset.key=key;
+      if(sel.has(key)) b.classList.add("sel");
+      b.addEventListener("click",function(){ if(document.body.classList.contains("done")) return;
+        if(sel.has(key)) sel.delete(key); else sel.add(key);
+        spans.forEach(function(s){ s.classList.toggle("sel", sel.has(s.dataset.key)); });
+        state.a.ex1=Array.from(sel); save(); showChosen(); });
+      spans.push(b); pe.appendChild(b);
+      if(m[3]) pe.appendChild(document.createTextNode(m[3]));
+    });
+    box.appendChild(pe);
+  });
+  c.appendChild(box);
+  var chosen=el("div",{class:"chosen"}); c.appendChild(chosen);
+  function label(k){ var s=spans.find(function(x){return x.dataset.key===k;}); return s?s.textContent:k; }
+  function showChosen(){ chosen.textContent = sel.size ? "Hai selezionato: "+Array.from(sel).map(label).join(", ") : "Nessuna parola selezionata."; }
+  showChosen();
+  graders.push({n:1,title:"Nomi propri",grade:function(){
+    var ok=[],wrong=[],miss=[];
+    sel.forEach(function(k){ (PROPER.indexOf(k)>=0?ok:wrong).push(label(k)); });
+    PROPER.forEach(function(k){ if(!sel.has(k)) miss.push(label(k)); });
+    spans.forEach(function(s){ var k=s.dataset.key; s.classList.remove("sel");
+      if(sel.has(k)) s.classList.add(PROPER.indexOf(k)>=0?"r-ok":"r-no");
+      else if(PROPER.indexOf(k)>=0) s.classList.add("r-miss"); });
+    var pts=Math.max(0, ok.length-wrong.length);
+    chosen.innerHTML="";
+    fixLine(chosen,"ok","Giuste: "+(ok.join(", ")||"nessuna"));
+    if(miss.length) fixLine(chosen,"warn","Mancanti (bordo giallo): "+miss.join(", "));
+    if(wrong.length) fixLine(chosen,"no","Non sono nomi propri: "+wrong.join(", "));
+    var det=[]; if(miss.length) det.push("mancano: "+miss.join(", ")); if(wrong.length) det.push("non sono nomi propri: "+wrong.join(", "));
+    return {pts:pts,max:PROPER.length,det:det};
+  },card:c});
+})();
+
+// 2
+(function(){
+  var c=exCard(2,"Come li riconosci?");
+  var opts=["Hanno l’iniziale maiuscola e indicano una persona, un luogo, un’istituzione o un periodo ben preciso","Sono sempre preceduti dall’articolo determinativo","Si trovano sempre all’inizio della frase"];
+  var box=choiceBlock(c,"ex2",opts);
+  graders.push({n:2,title:"Come si riconoscono i nomi propri",card:c,grade:function(){
+    var ok=gradeChoice(box,"ex2",0); var v=state.a.ex2;
+    return {pts:ok?1:0,max:1,det:ok?[]:["risposta data: "+(v!=null?opts[v]:"nessuna")]}; }});
+})();
+
+// 3
+(function(){
+  var c=exCard(3,"Inserisci l’articolo determinativo davanti ai nomi e volgi tutto al plurale.","Scrivi l’articolo nel primo riquadro, poi articolo e nome al plurale. Per l’articolo con l’apostrofo scrivi l'.");
+  var rows=el("div",{class:"rows"}); var refs=[];
+  EX3.forEach(function(it,i){
+    var r=el("div",{class:"row"});
+    var a=bindInput(el("input",{type:"text",class:"art","aria-label":"articolo di "+it.n,autocapitalize:"off",autocomplete:"off"}),"ex3a"+i);
+    var ap=bindInput(el("input",{type:"text",class:"art","aria-label":"articolo plurale di "+it.n,autocapitalize:"off",autocomplete:"off"}),"ex3ap"+i);
+    var p=bindInput(el("input",{type:"text",class:"pl","aria-label":"plurale di "+it.n,autocapitalize:"off",autocomplete:"off"}),"ex3p"+i);
+    var nn=el("span",{class:"noun"}); nn.textContent=it.n;
+    r.appendChild(a); r.appendChild(nn); r.appendChild(el("span",{class:"arrow","aria-hidden":"true"},"→")); r.appendChild(ap); r.appendChild(p);
+    rows.appendChild(r); refs.push([a,ap,p,r]);
+  });
+  c.appendChild(rows);
+  graders.push({n:3,title:"Articoli e plurali",card:c,grade:function(){
+    var pts=0, det=[];
+    EX3.forEach(function(it,i){ var f=refs[i]; var errs=[];
+      var ga=it.a.indexOf(norm(f[0].value))>=0, gap=it.ap.indexOf(norm(f[1].value))>=0, gp=it.p.indexOf(norm(f[2].value))>=0;
+      [[f[0],ga],[f[1],gap],[f[2],gp]].forEach(function(x){ x[0].classList.add(x[1]?"ok":"no"); if(x[1]) pts++; });
+      if(!(ga&&gap&&gp)){
+        var right=it.a[0]+(it.a[0]==="l'"?"":" ")+it.n+" → "+it.ap[0]+" "+it.p[0];
+        fixLine(f[3],"no","Corretto: "+right);
+        det.push(it.n+": scritto «"+(f[0].value||"–")+" "+it.n+" → "+(f[1].value||"–")+" "+(f[2].value||"–")+"», corretto «"+right+"»");
+      }
+    });
+    return {pts:pts,max:EX3.length*3,det:det}; }});
+})();
+
+// 4
+(function(){
+  var c=exCard(4,"Forma gli aggettivi qualificativi che derivano dai nomi e indica il suffisso.","Scrivi l’aggettivo e, nel riquadro piccolo, il suffisso (per esempio -oso).");
+  var rows=el("div",{class:"rows"}); var refs=[];
+  EX4.forEach(function(it,i){
+    var r=el("div",{class:"row"});
+    var l=el("span",{class:"lbl"}); l.textContent=it.n;
+    var a=bindInput(el("input",{type:"text",class:"adj","aria-label":"aggettivo da "+it.n,autocapitalize:"off",autocomplete:"off"}),"ex4a"+i);
+    var s=bindInput(el("input",{type:"text",class:"suf","aria-label":"suffisso",placeholder:"suffisso",autocapitalize:"off",autocomplete:"off"}),"ex4s"+i);
+    r.appendChild(l); r.appendChild(a); r.appendChild(s); rows.appendChild(r); refs.push([a,s,r]);
+  });
+  c.appendChild(rows);
+  graders.push({n:4,title:"Aggettivi derivati e suffissi",card:c,grade:function(){
+    var pts=0, det=[];
+    EX4.forEach(function(it,i){ var f=refs[i];
+      var av=norm(f[0].value), sv=norm(f[1].value).replace(/^-+/,"");
+      var match=it.opts.find(function(o){ return fem([o[0]]).indexOf(av)>=0; });
+      var ga=!!match;
+      var sufs=(match?[match]:it.opts).map(function(o){return o[1];});
+      var gs=sufs.some(function(sf){ return fem([sf]).indexOf(sv)>=0; });
+      f[0].classList.add(ga?"ok":"no"); f[1].classList.add(gs?"ok":"no");
+      pts+=(ga?1:0)+(gs?1:0);
+      if(!(ga&&gs)){
+        var right=it.opts.map(function(o){return o[0]+" (-"+o[1]+")";}).join(" oppure ");
+        fixLine(f[2],"no","Corretto: "+right);
+        det.push(it.n+": scritto «"+(f[0].value||"–")+" / "+(f[1].value||"–")+"», corretto «"+right+"»");
+      }
+    });
+    return {pts:pts,max:EX4.length*2,det:det}; }});
+})();
+
+// 5
+(function(){
+  var c=exCard(5,"Nel testo ci sono aggettivi di vario tipo. Di che tipo è ogni aggettivo evidenziato?");
+  var rows=el("div",{class:"rows"}); var refs=[];
+  EX5.forEach(function(it,i){
+    var r=el("div",{class:"row"}); var t=el("span",{class:"ctx"},it[0]);
+    var s=el("select",{"aria-label":"tipo di aggettivo"}); s.innerHTML='<option value="">scegli…</option><option value="Q">qualificativo</option><option value="I">indefinito</option><option value="N">numerale</option>';
+    bindInput(s,"ex5_"+i); s.addEventListener("change",function(){ state.a["ex5_"+i]=s.value; save(); });
+    r.appendChild(t); r.appendChild(s); rows.appendChild(r); refs.push([s,r]);
+  });
+  c.appendChild(rows);
+  graders.push({n:5,title:"Tipi di aggettivo",card:c,grade:function(){
+    var pts=0, det=[];
+    EX5.forEach(function(it,i){ var s=refs[i][0]; var g=s.value===it[1]; s.classList.add(g?"ok":"no"); if(g) pts++;
+      else { fixLine(refs[i][1],"no","Corretto: "+EX5L[it[1]]); det.push(it[0].replace(/<\/?b>/g,"")+": scritto «"+(EX5L[s.value]||"–")+"», corretto «"+EX5L[it[1]]+"»"); } });
+    return {pts:pts,max:EX5.length,det:det}; }});
+})();
+
+// 6
+(function(){
+  var c=exCard(6,"Pronome indefinito o no?","Nel testo i pronomi indefiniti sono pochi, e somigliano molto ad aggettivi e altri pronomi. Indica che cos’è ogni parola evidenziata.");
+  var rows=el("div",{class:"rows"}); var refs=[];
+  EX6.forEach(function(it,i){
+    var r=el("div",{class:"row"}); var t=el("span",{class:"ctx"},it[0]);
+    var s=el("select",{"aria-label":"tipo di parola"}); s.innerHTML='<option value="">scegli…</option><option value="PI">pronome indefinito</option><option value="AI">aggettivo indefinito</option><option value="PD">pronome dimostrativo</option>';
+    bindInput(s,"ex6_"+i); s.addEventListener("change",function(){ state.a["ex6_"+i]=s.value; save(); });
+    r.appendChild(t); r.appendChild(s); rows.appendChild(r); refs.push([s,r]);
+  });
+  c.appendChild(rows);
+  graders.push({n:6,title:"Pronomi indefiniti",card:c,grade:function(){
+    var pts=0, det=[];
+    EX6.forEach(function(it,i){ var s=refs[i][0]; var g=s.value===it[1]; s.classList.add(g?"ok":"no"); if(g) pts++;
+      else { fixLine(refs[i][1],"no","Corretto: "+EX6L[it[1]]); det.push(it[0].replace(/<\/?b>/g,"")+": scritto «"+(EX6L[s.value]||"–")+"», corretto «"+EX6L[it[1]]+"»"); } });
+    return {pts:pts,max:EX6.length,det:det}; }});
+})();
+
+/* LESSICO */
+part("Lessico");
+
+// 7
+(function(){
+  var c=exCard(7,"Scrivi il contrario dei seguenti aggettivi presenti nel testo.","Se scrivi un contrario corretto che il programma non conosce, l’insegnante lo vedrà nel resoconto e potrà darti il punto.");
+  var rows=el("div",{class:"rows"}); var refs=[];
+  EX7.forEach(function(it,i){
+    var r=el("div",{class:"row"}); var l=el("span",{class:"lbl"}); l.textContent=it.n;
+    var a=bindInput(el("input",{type:"text",class:"adj","aria-label":"contrario di "+it.n,autocapitalize:"off",autocomplete:"off"}),"ex7_"+i);
+    r.appendChild(l); r.appendChild(a); rows.appendChild(r); refs.push([a,r]);
+  });
+  c.appendChild(rows);
+  graders.push({n:7,title:"Contrari",card:c,grade:function(){
+    var pts=0, det=[];
+    EX7.forEach(function(it,i){ var a=refs[i][0]; var v=norm(a.value); var g=v && fem(it.ok).indexOf(v)>=0;
+      if(g){ a.classList.add("ok"); pts++; }
+      else if(v){ a.classList.add("warn"); fixLine(refs[i][1],"warn","Da controllare dall’insegnante. Risposte previste: "+it.ok.slice(0,4).join(", ")); det.push(it.n+": scritto «"+a.value+"» (da controllare)"); }
+      else { a.classList.add("no"); fixLine(refs[i][1],"no","Esempi: "+it.ok.slice(0,4).join(", ")); det.push(it.n+": nessuna risposta"); }
+    });
+    return {pts:pts,max:EX7.length,det:det}; }});
+})();
+
+// 8
+(function(){
+  var c=exCard(8,"Che cosa significa l’aggettivo “trascurabile”?");
+  var opts=["Che si deve trascurare","Che si può trascurare","Che si vuole trascurare"];
+  var box=choiceBlock(c,"ex8",opts);
+  graders.push({n:8,title:"Significato di “trascurabile”",card:c,grade:function(){
+    var ok=gradeChoice(box,"ex8",1); var v=state.a.ex8;
+    return {pts:ok?1:0,max:1,det:ok?[]:["risposta data: "+(v!=null?opts[v]:"nessuna")]}; }});
+})();
+
+// 9
+function openQ(n,title,quote,id,label){
+  var c=exCard(n,title);
+  if(quote) c.appendChild(el("p",{class:"quote"},quote));
+  var t=bindInput(el("textarea",{"aria-label":label}),id); c.appendChild(t);
+  graders.push({n:n,title:label,card:c,open:true,grade:function(){ t.classList.add("ok"); return {pts:0,max:null,text:t.value.trim()}; }});
+}
+openQ(9,"Riformula la frase usando termini più semplici.","“L’età del gioco era considerata un trascurabile intervallo tra lo svezzamento e l’impiego nel lavoro.”","ex9","Frase riformulata");
+
+/* COMPRENSIONE */
+part("Comprensione");
+openQ(10,"Qual è il messaggio principale del testo?",null,"ex10","Messaggio principale");
+
+// 11
+(function(){
+  var c=exCard(11,"Quale frase nominale sintetizza la condizione dei bambini in epoca medievale?","Una frase nominale è una frase senza verbo.");
+  var opts=["Le femmine erano subito messe a lavorare in casa.","Nessuna scuola, niente vacanze, pochi giochi.","Sappiamo con certezza che la mortalità infantile era altissima.","Pochi sopravvivevano."];
+  var box=choiceBlock(c,"ex11",opts);
+  graders.push({n:11,title:"Frase nominale",card:c,grade:function(){
+    var ok=gradeChoice(box,"ex11",1); var v=state.a.ex11;
+    return {pts:ok?1:0,max:1,det:ok?[]:["risposta data: "+(v!=null?opts[v]:"nessuna")]}; }});
+})();
+
+openQ(12,"Scrivi un titolo più ad effetto.",null,"ex12","Titolo più ad effetto");
+
+/* ---------- Consegna ---------- */
+var btnSubmit=document.getElementById("btnSubmit"), errBox=document.getElementById("submitErr");
+function submit(auto){
+  var name=document.getElementById("sname").value.trim(), cls=document.getElementById("sclass").value.trim();
+  if(!auto && (!name||!cls)){ errBox.textContent="Scrivi nome, cognome e classe in cima alla pagina prima di consegnare."; document.getElementById(name?"sclass":"sname").focus(); return; }
+  if(!auto && !confirm("Vuoi consegnare? Dopo non potrai più modificare le risposte.")) return;
+  errBox.textContent="";
+  document.body.classList.add("done");
+  document.querySelectorAll("#exercises input, #exercises select, #exercises textarea, #sname, #sclass").forEach(function(x){ x.disabled=true; });
+  btnSubmit.hidden=true;
+  var tot=0,max=0,lines=[],opens=[];
+  graders.forEach(function(g){ var r=g.grade(); setScore(g.card,r.pts,r.max);
+    if(r.max==null){ opens.push("Es. "+g.n+" – "+g.title+":\n"+(r.text||"(nessuna risposta)")); return; }
+    tot+=r.pts; max+=r.max;
+    lines.push("Es. "+g.n+" – "+g.title+": "+r.pts+"/"+r.max + (r.det.length?"\n   - "+r.det.join("\n   - "):""));
+  });
+  if(!state.submittedAt){ state.submittedAt=new Date().toISOString(); state.submitted=true; save(); }
+  var when=new Date(state.submittedAt);
+  var dec=Math.round(tot/max*20)/2;
+  var decStr=String(dec).replace(".",",");
+  document.getElementById("bigScore").textContent=tot+" / "+max;
+  document.getElementById("subScore").textContent="equivale a circa "+decStr+" su 10 (esclusi gli esercizi 9, 10 e 12)";
+  var rep="VERIFICA – Giocare nel Medioevo (Modulo C, morfologia)\n"+
+    "Studente: "+name+"\nClasse: "+cls+"\nConsegnata il: "+when.toLocaleString("it-IT")+"\n"+
+    "Punteggio automatico: "+tot+"/"+max+" (circa "+decStr+"/10)\n\n"+
+    "DETTAGLIO\n"+lines.join("\n")+"\n\nRISPOSTE APERTE (da correggere)\n"+opens.join("\n\n")+"\n";
+  document.getElementById("report").value=rep;
+  var res=document.getElementById("result"); res.classList.add("show");
+  if(!auto) res.scrollIntoView({block:"start"});
+}
+btnSubmit.addEventListener("click",function(){ submit(false); });
+
+var toast=document.getElementById("toast");
+function say(t){ toast.textContent=t; setTimeout(function(){ if(toast.textContent===t) toast.textContent=""; },4000); }
+document.getElementById("btnCopy").addEventListener("click",function(){
+  var ta=document.getElementById("report"); var txt=ta.value;
+  function fallback(){ ta.removeAttribute("readonly"); ta.focus(); ta.select(); var ok=false; try{ ok=document.execCommand("copy"); }catch(e){} ta.setAttribute("readonly",""); say(ok?"Resoconto copiato.":"Seleziona il testo e copialo a mano (tieni premuto sul testo)."); }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ say("Resoconto copiato."); }, fallback); } else fallback();
+});
+document.getElementById("btnMail").addEventListener("click",function(){
+  var name=document.getElementById("sname").value.trim();
+  var url="mailto:?subject="+encodeURIComponent("Verifica Giocare nel Medioevo – "+name)+"&body="+encodeURIComponent(document.getElementById("report").value);
+  var w=null; try{ w=window.open(url,"_blank"); }catch(e){}
+  if(!w){ try{ window.top.location.href=url; }catch(e){ say("L’email non si apre da qui: copia il resoconto e incollalo in un messaggio."); } }
+});
+
+var downloads=null;
+if(window.claude && typeof window.claude.use==="function"){
+  window.claude.use("downloads").then(function(d){ downloads=d; if(d) document.getElementById("btnDownload").hidden=false; }).catch(function(){});
+}
+document.getElementById("btnDownload").addEventListener("click",function(){
+  if(!downloads) return;
+  var name=(document.getElementById("sname").value.trim()||"studente").replace(/[^\p{L}\p{N} _-]/gu,"").replace(/\s+/g,"_");
+  downloads.save({filename:"verifica_medioevo_"+name+".txt",data:document.getElementById("report").value}).then(function(){ say("Resoconto scaricato."); },function(e){
+    if(e && (e.code==="unavailable"||e.code==="not_granted")) document.getElementById("btnDownload").hidden=true;
+    else if(!(e && e.code==="declined")) say("Download non riuscito: usa “Copia il resoconto”.");
+  });
+});
+
+document.getElementById("btnReset").addEventListener("click",function(){
+  if(!confirm("Cancellare tutte le risposte e ricominciare da capo?")) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  location.reload();
+});
+
+if(state.submitted) submit(true);
+})();
+</script>
+</body>
+</html>
