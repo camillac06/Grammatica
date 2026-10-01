@@ -106,6 +106,10 @@ button.link{font:inherit;font-size:14px;background:none;border:0;color:var(--mut
 .send ol li{margin-bottom:4px}
 .send .to{font-weight:700;word-break:break-all}
 .send .actions{align-items:center}
+.sheet-status{font-size:17px;margin:0 0 12px}
+.sheet-status.ok{color:var(--ok);font-weight:700}
+details.alt{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+details.alt summary{cursor:pointer;color:var(--blue);font-size:15px;margin-bottom:8px}
 .paste{background:var(--warn-soft);color:var(--warn);border-radius:4px;padding:8px 10px;font-size:15px;margin-top:12px}
 details.rep summary{cursor:pointer;color:var(--blue);font-size:15px;margin:6px 0 10px}
 #report{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;min-height:220px;background:var(--bg)}
@@ -139,7 +143,7 @@ details.rep summary{cursor:pointer;color:var(--blue);font-size:15px;margin:6px 0
   <header class="hero">
     <p class="mod">Modulo C, morfologia: il nome, l’articolo, l’aggettivo, il pronome</p>
     <h1>Giocare nel Medioevo</h1>
-    <p>Leggi il testo, poi svolgi gli esercizi. Quando hai finito premi “Consegna”: vedrai il punteggio e potrai inviare le risposte all’insegnante con Gmail.</p>
+    <p>Leggi il testo, poi svolgi gli esercizi. Quando hai finito premi “Consegna”: vedrai il punteggio e potrai inviare le risposte all’insegnante.</p>
   </header>
 
   <section class="card student" aria-label="Dati dello studente">
@@ -165,16 +169,26 @@ details.rep summary{cursor:pointer;color:var(--blue);font-size:15px;margin:6px 0
     <p class="note" style="margin-top:0">Le domande 9, 10 e 12 non hanno un punteggio automatico: le corregge l’insegnante.</p>
 
     <div class="send">
-      <h3>Ora invia le risposte all’insegnante</h3>
-      <ol>
-        <li>Premi <b>Invia con Gmail</b>: si apre un messaggio già pronto, indirizzato a <span class="to" id="toAddr"></span>.</li>
-        <li>In Gmail premi <b>Invia</b>. Non modificare il testo del messaggio.</li>
-      </ol>
-      <div class="actions">
-        <a class="primary" id="lnkGmail" href="#" target="_blank" rel="noopener">Invia con Gmail</a>
-        <a class="secondary" id="lnkMail" href="#" target="_blank" rel="noopener">Altra app di posta</a>
+      <h3>Invia le risposte all’insegnante</h3>
+      <p class="sheet-status" id="sheetStatus" role="status">Invio delle risposte in corso…</p>
+      <div id="sheetManual" hidden>
+        <div class="actions">
+          <a class="primary" id="lnkSheet" href="#" target="_blank" rel="noopener">Invia all’insegnante</a>
+        </div>
+        <p class="note">Si apre una nuova scheda. Se Google ti chiede di accedere, usa il tuo account della scuola (<b>@comprensivoalmese.it</b>). Quando nella nuova scheda compare <b>“Consegna ricevuta ✓”</b> hai finito e puoi chiuderla.</p>
       </div>
-      <div class="paste" id="pasteNote" hidden></div>
+      <details class="alt" id="altMail">
+        <summary>Non funziona? Invia con Gmail</summary>
+        <ol>
+          <li>Premi <b>Invia con Gmail</b>: si apre un messaggio già pronto, indirizzato a <span class="to" id="toAddr"></span>.</li>
+          <li>In Gmail premi <b>Invia</b>. Non modificare il testo del messaggio.</li>
+        </ol>
+        <div class="actions">
+          <a class="primary" id="lnkGmail" href="#" target="_blank" rel="noopener">Invia con Gmail</a>
+          <a class="secondary" id="lnkMail" href="#" target="_blank" rel="noopener">Altra app di posta</a>
+        </div>
+        <div class="paste" id="pasteNote" hidden></div>
+      </details>
     </div>
 
     <p class="note">Gmail non si apre? Premi “Copia il resoconto” e incollalo in un’email a <span class="to" id="toAddr2"></span>.</p>
@@ -607,10 +621,11 @@ function finalize(auto){
   document.body.classList.add("done");
   document.querySelectorAll("#exercises input, #exercises select, #exercises textarea, #sname, #sclass").forEach(function(x){ x.disabled=true; });
   btnSubmit.hidden=true; btnReset.hidden=true;
-  var tot=0,max=0,lines=[],opens=[],sig=[];
+  var tot=0,max=0,lines=[],opens=[],sig=[],esPts={},openTxt={},errs=[];
   graders.forEach(function(g){ var r=g.grade(); setScore(g.card,r.pts,r.max);
-    if(r.max==null){ opens.push("Es. "+g.n+" – "+g.title+":\n"+(r.text||"(nessuna risposta)")); return; }
-    tot+=r.pts; max+=r.max; sig.push(g.n+":"+r.pts+"/"+r.max);
+    if(r.max==null){ openTxt[g.n]=r.text||""; opens.push("Es. "+g.n+" – "+g.title+":\n"+(r.text||"(nessuna risposta)")); return; }
+    tot+=r.pts; max+=r.max; sig.push(g.n+":"+r.pts+"/"+r.max); esPts[g.n]=r.pts;
+    r.det.forEach(function(d){ errs.push("Es. "+g.n+": "+d); });
     lines.push("Es. "+g.n+" – "+g.title+": "+r.pts+"/"+r.max + (r.det.length?"\n   - "+r.det.join("\n   - "):""));
   });
   if(!state.submittedAt){ state.submittedAt=new Date().toISOString(); state.submitted=true; save(); }
@@ -632,7 +647,43 @@ function finalize(auto){
   buildSendLinks(name, head, lines, opens);
   var res=document.getElementById("result"); res.classList.add("show");
   if(!auto) res.scrollIntoView({block:"start"});
+  sendSheet({id:state.submittedAt+"-"+code, nome:name, classe:cls, consegnata:state.submittedAt, minuti:mins,
+    punti:tot, max:max, es:esPts, r9:openTxt[9], r10:openTxt[10], r12:openTxt[12], errori:errs.join("\n"), codice:code});
 }
+
+/* Foglio Google dell’insegnante (Apps Script) */
+var SHEET_URL="https://script.google.com/a/macros/comprensivoalmese.it/s/AKfycbxQedBU4QsLvrUD9VwXPCFNsoXfktAHo98kmT_YK0cAHmq3HgFUNDYscJ8FKm39Q6V9/exec";
+var sheetStatus=document.getElementById("sheetStatus"), sheetManual=document.getElementById("sheetManual");
+function sheetOk(){
+  sheetStatus.textContent="✓ Consegna ricevuta dall’insegnante. Hai finito!";
+  sheetStatus.className="sheet-status ok"; sheetManual.hidden=true;
+}
+function sheetGetUrl(p){
+  var q=JSON.parse(JSON.stringify(p));
+  var url=SHEET_URL+"?d="+encodeURIComponent(JSON.stringify(q));
+  if(url.length>7500){ q.errori="(troppo lungo: vedi il resoconto per email)"; url=SHEET_URL+"?d="+encodeURIComponent(JSON.stringify(q)); }
+  if(url.length>7500){ ["r9","r10","r12"].forEach(function(k){ if(q[k]&&q[k].length>500) q[k]=q[k].slice(0,500)+"…"; }); url=SHEET_URL+"?d="+encodeURIComponent(JSON.stringify(q)); }
+  return url;
+}
+function sendSheet(p){
+  document.getElementById("lnkSheet").href=sheetGetUrl(p);
+  if(state.sheetOk){ sheetOk(); return; }
+  function manual(){
+    if(state.sheetOk) return;
+    sheetStatus.textContent=state.sheetClicked?"Hai già premuto “Invia all’insegnante”: se nella nuova scheda è comparso “Consegna ricevuta ✓” hai finito. Altrimenti premilo di nuovo.":"Ultimo passo: premi il pulsante qui sotto per inviare le risposte.";
+    sheetStatus.className="sheet-status"; sheetManual.hidden=false;
+  }
+  var done=false, timer=setTimeout(function(){ if(!done){ done=true; manual(); } },15000);
+  fetch(SHEET_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)})
+    .then(function(r){ return r.text(); })
+    .then(function(t){ if(done) return; done=true; clearTimeout(timer); t=String(t).trim();
+      if(t==="ok"||t==="gia_ricevuta"){ state.sheetOk=true; save(); sheetOk(); } else manual(); })
+    .catch(function(){ if(done) return; done=true; clearTimeout(timer); manual(); });
+}
+document.getElementById("lnkSheet").addEventListener("click",function(){
+  state.sheetClicked=true; save();
+  setTimeout(function(){ if(!state.sheetOk) sheetStatus.textContent="Controlla la nuova scheda: quando compare “Consegna ricevuta ✓” hai finito. Se non compare, premi di nuovo il pulsante oppure usa Gmail qui sotto."; },800);
+});
 
 /* Email: Gmail web (funziona su Chromebook e computer della scuola) + app di posta */
 var MAXURL=7500;
