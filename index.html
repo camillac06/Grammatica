@@ -12,6 +12,7 @@
   --bg:#E9EBE0; --paper:#FBFBF6; --ink:#2A221B; --muted:#6B5F52; --line:#D3D0BF;
   --red:#A8342A; --red-soft:#F3DCD6; --ochre:#9A6E16; --blue:#35566F; --blue-soft:#DCE6EE;
   --ok:#2E6A38; --ok-soft:#DDEBDD; --no:#A8342A; --no-soft:#F6DFDA; --warn:#8A6512; --warn-soft:#F4EAD2;
+  --scrim:rgba(42,34,27,.45);
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
@@ -21,14 +22,17 @@
     --bg:#1B1A17; --paper:#25231F; --ink:#EDE6DA; --muted:#A99D8D; --line:#3B362F;
     --red:#E3806F; --red-soft:#4A2723; --ochre:#D9AE55; --blue:#93B7D3; --blue-soft:#243441;
     --ok:#86C792; --ok-soft:#1F3524; --no:#E3806F; --no-soft:#46251F; --warn:#DDB45E; --warn-soft:#3B311C;
+    --scrim:rgba(0,0,0,.6);
   }
 }
 :root[data-theme="dark"]{
   --bg:#1B1A17; --paper:#25231F; --ink:#EDE6DA; --muted:#A99D8D; --line:#3B362F;
   --red:#E3806F; --red-soft:#4A2723; --ochre:#D9AE55; --blue:#93B7D3; --blue-soft:#243441;
   --ok:#86C792; --ok-soft:#1F3524; --no:#E3806F; --no-soft:#46251F; --warn:#DDB45E; --warn-soft:#3B311C;
+  --scrim:rgba(0,0,0,.6);
 }
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Alegreya Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.5}
 .wrap{max-width:760px;margin:0 auto;padding:28px 18px 80px}
@@ -42,7 +46,7 @@ header.hero{padding:18px 0 22px}
 .student label{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
 input[type=text],textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%}
 textarea{min-height:90px;resize:vertical;font-family:"Alegreya",Georgia,serif;font-size:17px}
-input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,.w:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible,.w:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .reading{font-family:"Alegreya",Georgia,serif;font-size:18px;line-height:1.65;margin-bottom:36px}
 .reading h2{font-size:28px;margin:0 0 12px}
 .reading p{margin:0 0 .9em;max-width:68ch}
@@ -87,8 +91,8 @@ input.warn{border-color:var(--warn);background:var(--warn-soft)}
 .quote{font-family:"Alegreya",Georgia,serif;font-style:italic;border-left:3px solid var(--ochre);padding-left:12px;margin:0 0 12px}
 .note{font-size:14px;color:var(--muted);margin-top:8px}
 .submit{margin-top:40px;text-align:center}
-button.primary{font:inherit;font-weight:700;font-size:18px;background:var(--red);color:#fff;border:0;border-radius:6px;padding:14px 28px;cursor:pointer}
-button.secondary{font:inherit;font-weight:500;background:transparent;color:var(--blue);border:1px solid var(--blue);border-radius:6px;padding:10px 18px;cursor:pointer}
+.primary{display:inline-block;font:inherit;font-weight:700;font-size:18px;background:var(--red);color:#fff;border:0;border-radius:6px;padding:14px 28px;cursor:pointer;text-decoration:none;text-align:center}
+.secondary{display:inline-block;font:inherit;font-weight:500;background:transparent;color:var(--blue);border:1px solid var(--blue);border-radius:6px;padding:10px 18px;cursor:pointer;text-decoration:none;text-align:center}
 button.link{font:inherit;font-size:14px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;margin-top:16px}
 .err{color:var(--no);font-size:15px;margin-top:10px;min-height:1.4em}
 #result{display:none;margin-top:36px}
@@ -96,14 +100,36 @@ button.link{font:inherit;font-size:14px;background:none;border:0;color:var(--mut
 .total{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 .total .big{font-family:"Alegreya",Georgia,serif;font-size:56px;font-weight:800;line-height:1;color:var(--red)}
 .total .sub{color:var(--muted)}
+.send{border:2px solid var(--red);border-radius:6px;padding:16px;margin:18px 0;background:var(--bg)}
+.send h3{font-size:22px;margin:0 0 6px}
+.send ol{margin:0 0 14px;padding-left:22px}
+.send ol li{margin-bottom:4px}
+.send .to{font-weight:700;word-break:break-all}
+.send .actions{align-items:center}
+.paste{background:var(--warn-soft);color:var(--warn);border-radius:4px;padding:8px 10px;font-size:15px;margin-top:12px}
+details.rep summary{cursor:pointer;color:var(--blue);font-size:15px;margin:6px 0 10px}
 #report{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;min-height:220px;background:var(--bg)}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 .toast{font-size:14px;color:var(--ok);margin-top:8px;min-height:1.3em}
+.teacher{margin-top:48px}
+.teacher summary{cursor:pointer;color:var(--muted);font-size:15px}
+.teacher textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;margin-top:8px}
+.chk{margin-top:10px;font-size:15px;border-radius:4px}
+.chk.ok{background:var(--ok-soft);color:var(--ok);padding:8px 10px}
+.chk.no{background:var(--no-soft);color:var(--no);padding:8px 10px}
+.modal{position:fixed;inset:0;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal[hidden]{display:none}
+.modal-box{max-width:440px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.modal-box h3{font-size:22px;margin:0 0 8px}
+.modal-box p{margin:0 0 6px}
+.modal-box .actions{justify-content:flex-end;margin-top:18px}
+.modal-box .primary{font-size:17px;padding:10px 20px}
 @media (max-width:520px){
   .student{grid-template-columns:1fr}
   .card{padding:16px 14px}
   .row .lbl{min-width:0;flex-basis:100%}
   .row select{flex:1;min-width:0}
+  .send .actions a{flex:1 1 100%}
 }
 @media (prefers-reduced-motion:no-preference){ html{scroll-behavior:smooth} }
 </style>
@@ -113,7 +139,7 @@ button.link{font:inherit;font-size:14px;background:none;border:0;color:var(--mut
   <header class="hero">
     <p class="mod">Modulo C, morfologia: il nome, l’articolo, l’aggettivo, il pronome</p>
     <h1>Giocare nel Medioevo</h1>
-    <p>Leggi il testo, poi svolgi gli esercizi. Quando hai finito premi “Consegna”: vedrai il punteggio e il resoconto da inviare all’insegnante.</p>
+    <p>Leggi il testo, poi svolgi gli esercizi. Quando hai finito premi “Consegna”: vedrai il punteggio e potrai inviare le risposte all’insegnante con Gmail.</p>
   </header>
 
   <section class="card student" aria-label="Dati dello studente">
@@ -136,22 +162,61 @@ button.link{font:inherit;font-size:14px;background:none;border:0;color:var(--mut
 
   <section id="result" class="card" aria-live="polite">
     <div class="total"><span class="big" id="bigScore"></span><span class="sub" id="subScore"></span></div>
-    <p class="note" style="margin-top:0">Le domande 9, 10 e 12 non hanno un punteggio automatico: le corregge l’insegnante. Copia il resoconto qui sotto e invialo nel modo indicato dall’insegnante (email, Classroom, registro).</p>
-    <textarea id="report" readonly aria-label="Resoconto"></textarea>
+    <p class="note" style="margin-top:0">Le domande 9, 10 e 12 non hanno un punteggio automatico: le corregge l’insegnante.</p>
+
+    <div class="send">
+      <h3>Ora invia le risposte all’insegnante</h3>
+      <ol>
+        <li>Premi <b>Invia con Gmail</b>: si apre un messaggio già pronto, indirizzato a <span class="to" id="toAddr"></span>.</li>
+        <li>In Gmail premi <b>Invia</b>. Non modificare il testo del messaggio.</li>
+      </ol>
+      <div class="actions">
+        <a class="primary" id="lnkGmail" href="#" target="_blank" rel="noopener">Invia con Gmail</a>
+        <a class="secondary" id="lnkMail" href="#" target="_blank" rel="noopener">Altra app di posta</a>
+      </div>
+      <div class="paste" id="pasteNote" hidden></div>
+    </div>
+
+    <p class="note">Gmail non si apre? Premi “Copia il resoconto” e incollalo in un’email a <span class="to" id="toAddr2"></span>.</p>
+    <details class="rep">
+      <summary>Mostra il resoconto</summary>
+      <textarea id="report" readonly aria-label="Resoconto"></textarea>
+    </details>
     <div class="actions">
       <button class="secondary" id="btnCopy">Copia il resoconto</button>
-      <button class="secondary" id="btnMail">Invia per email</button>
       <button class="secondary" id="btnDownload" hidden>Scarica il resoconto</button>
     </div>
-    <div class="toast" id="toast"></div>
+    <div class="toast" id="toast" role="status"></div>
   </section>
 
   <div style="text-align:center"><button class="link" id="btnReset">Cancella tutte le risposte e ricomincia</button></div>
+
+  <details class="card teacher">
+    <summary>Per l’insegnante: controlla un resoconto ricevuto</summary>
+    <p class="note">Incolla qui il testo dell’email ricevuta. Il controllo verifica, attraverso il codice di controllo, che nome, classe, punteggi e tempo impiegato non siano stati modificati dopo la consegna.</p>
+    <textarea id="chkIn" aria-label="Resoconto da controllare"></textarea>
+    <div class="actions"><button class="secondary" id="btnChk">Controlla</button></div>
+    <div class="chk" id="chkOut" role="status"></div>
+  </details>
+</div>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalText">
+  <div class="card modal-box">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <div class="actions">
+      <button class="secondary" id="modalNo">Annulla</button>
+      <button class="primary" id="modalYes">Sì</button>
+    </div>
+  </div>
 </div>
 
 <script>
 (function(){
 "use strict";
+
+var TEACHER = "camilla.cantore@comprensivoalmese.it";
+var SALT = "mdv-modC-7q2";
 
 /* ---------- Testo ---------- */
 var PARAS = [
@@ -163,6 +228,8 @@ var PARAS = [
 ];
 var rt = document.getElementById("readingText");
 PARAS.forEach(function(p){ var el=document.createElement("p"); el.textContent=p; rt.appendChild(el); });
+document.getElementById("toAddr").textContent=TEACHER;
+document.getElementById("toAddr2").textContent=TEACHER;
 
 /* ---------- Utilità ---------- */
 function norm(s){
@@ -175,13 +242,48 @@ function fem(list){ // aggiunge le forme femminili/plurali più comuni
   }); return out;
 }
 function el(tag, attrs, html){ var e=document.createElement(tag); if(attrs) for(var k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html!=null) e.innerHTML=html; return e; }
-function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+function fnv(s, h){ h=h>>>0; for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619)>>>0; } return h; }
+function hex4(n){ return ("0000"+(n&0xffff).toString(16)).slice(-4).toUpperCase(); }
+function sign(parts){ // codice di controllo del resoconto
+  var s=SALT+"|"+parts.map(norm).join("|");
+  return hex4(fnv(s,2166136261)>>>16)+"-"+hex4(fnv(s+"#",0x5bd1e995));
+}
+
+/* ---------- Finestra di conferma (dentro la pagina) ---------- */
+var modal=document.getElementById("modal"), mYes=document.getElementById("modalYes"), mNo=document.getElementById("modalNo");
+var resolver=null, lastFocus=null;
+function ask(title, text, yes){
+  return new Promise(function(res){
+    lastFocus=document.activeElement;
+    document.getElementById("modalTitle").textContent=title;
+    document.getElementById("modalText").textContent=text;
+    mYes.textContent=yes||"Sì";
+    resolver=res; modal.hidden=false; mYes.focus();
+  });
+}
+function closeModal(v){
+  if(!resolver) return;
+  var r=resolver; resolver=null; modal.hidden=true;
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+  r(v);
+}
+mYes.addEventListener("click",function(){ closeModal(true); });
+mNo.addEventListener("click",function(){ closeModal(false); });
+modal.addEventListener("click",function(e){ if(e.target===modal) closeModal(false); });
+document.addEventListener("keydown",function(e){
+  if(modal.hidden) return;
+  if(e.key==="Escape"){ e.preventDefault(); closeModal(false); }
+  if(e.key==="Tab"){ e.preventDefault(); (document.activeElement===mYes?mNo:mYes).focus(); }
+});
 
 /* ---------- Stato salvato (solo su questo dispositivo) ---------- */
 var KEY="medioevo-modC-v1";
 var state={};
 try{ state=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; }catch(e){ state={}; }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function save(){
+  if(!state.startedAt && !state.submitted) state.startedAt=new Date().toISOString();
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
 state.a = state.a || {};
 function bindInput(input, id){
   if(state.a[id]!=null) input.value=state.a[id];
@@ -321,7 +423,7 @@ part("Analisi");
     if(wrong.length) fixLine(chosen,"no","Non sono nomi propri: "+wrong.join(", "));
     var det=[]; if(miss.length) det.push("mancano: "+miss.join(", ")); if(wrong.length) det.push("non sono nomi propri: "+wrong.join(", "));
     return {pts:pts,max:PROPER.length,det:det};
-  },card:c});
+  },card:c,empty:function(){ return sel.size?0:1; }});
 })();
 
 // 2
@@ -329,7 +431,7 @@ part("Analisi");
   var c=exCard(2,"Come li riconosci?");
   var opts=["Hanno l’iniziale maiuscola e indicano una persona, un luogo, un’istituzione o un periodo ben preciso","Sono sempre preceduti dall’articolo determinativo","Si trovano sempre all’inizio della frase"];
   var box=choiceBlock(c,"ex2",opts);
-  graders.push({n:2,title:"Come si riconoscono i nomi propri",card:c,grade:function(){
+  graders.push({n:2,title:"Come si riconoscono i nomi propri",card:c,empty:function(){ return state.a.ex2==null?1:0; },grade:function(){
     var ok=gradeChoice(box,"ex2",0); var v=state.a.ex2;
     return {pts:ok?1:0,max:1,det:ok?[]:["risposta data: "+(v!=null?opts[v]:"nessuna")]}; }});
 })();
@@ -350,7 +452,7 @@ part("Analisi");
   c.appendChild(rows);
   graders.push({n:3,title:"Articoli e plurali",card:c,grade:function(){
     var pts=0, det=[];
-    EX3.forEach(function(it,i){ var f=refs[i]; var errs=[];
+    EX3.forEach(function(it,i){ var f=refs[i];
       var ga=it.a.indexOf(norm(f[0].value))>=0, gap=it.ap.indexOf(norm(f[1].value))>=0, gp=it.p.indexOf(norm(f[2].value))>=0;
       [[f[0],ga],[f[1],gap],[f[2],gp]].forEach(function(x){ x[0].classList.add(x[1]?"ok":"no"); if(x[1]) pts++; });
       if(!(ga&&gap&&gp)){
@@ -457,7 +559,7 @@ part("Lessico");
   var c=exCard(8,"Che cosa significa l’aggettivo “trascurabile”?");
   var opts=["Che si deve trascurare","Che si può trascurare","Che si vuole trascurare"];
   var box=choiceBlock(c,"ex8",opts);
-  graders.push({n:8,title:"Significato di “trascurabile”",card:c,grade:function(){
+  graders.push({n:8,title:"Significato di “trascurabile”",card:c,empty:function(){ return state.a.ex8==null?1:0; },grade:function(){
     var ok=gradeChoice(box,"ex8",1); var v=state.a.ex8;
     return {pts:ok?1:0,max:1,det:ok?[]:["risposta data: "+(v!=null?opts[v]:"nessuna")]}; }});
 })();
@@ -480,7 +582,7 @@ openQ(10,"Qual è il messaggio principale del testo?",null,"ex10","Messaggio pri
   var c=exCard(11,"Quale frase nominale sintetizza la condizione dei bambini in epoca medievale?","Una frase nominale è una frase senza verbo.");
   var opts=["Le femmine erano subito messe a lavorare in casa.","Nessuna scuola, niente vacanze, pochi giochi.","Sappiamo con certezza che la mortalità infantile era altissima.","Pochi sopravvivevano."];
   var box=choiceBlock(c,"ex11",opts);
-  graders.push({n:11,title:"Frase nominale",card:c,grade:function(){
+  graders.push({n:11,title:"Frase nominale",card:c,empty:function(){ return state.a.ex11==null?1:0; },grade:function(){
     var ok=gradeChoice(box,"ex11",1); var v=state.a.ex11;
     return {pts:ok?1:0,max:1,det:ok?[]:["risposta data: "+(v!=null?opts[v]:"nessuna")]}; }});
 })();
@@ -489,48 +591,104 @@ openQ(12,"Scrivi un titolo più ad effetto.",null,"ex12","Titolo più ad effetto
 
 /* ---------- Consegna ---------- */
 var btnSubmit=document.getElementById("btnSubmit"), errBox=document.getElementById("submitErr");
-function submit(auto){
+var btnReset=document.getElementById("btnReset");
+var fullReport="";
+
+function countEmpty(){
+  var n=0;
+  document.querySelectorAll("#exercises input[type=text], #exercises select, #exercises textarea").forEach(function(x){ if(!x.value.trim()) n++; });
+  graders.forEach(function(g){ if(g.empty) n+=g.empty(); });
+  return n;
+}
+
+function finalize(auto){
   var name=document.getElementById("sname").value.trim(), cls=document.getElementById("sclass").value.trim();
-  if(!auto && (!name||!cls)){ errBox.textContent="Scrivi nome, cognome e classe in cima alla pagina prima di consegnare."; document.getElementById(name?"sclass":"sname").focus(); return; }
-  if(!auto && !confirm("Vuoi consegnare? Dopo non potrai più modificare le risposte.")) return;
   errBox.textContent="";
   document.body.classList.add("done");
   document.querySelectorAll("#exercises input, #exercises select, #exercises textarea, #sname, #sclass").forEach(function(x){ x.disabled=true; });
-  btnSubmit.hidden=true;
-  var tot=0,max=0,lines=[],opens=[];
+  btnSubmit.hidden=true; btnReset.hidden=true;
+  var tot=0,max=0,lines=[],opens=[],sig=[];
   graders.forEach(function(g){ var r=g.grade(); setScore(g.card,r.pts,r.max);
     if(r.max==null){ opens.push("Es. "+g.n+" – "+g.title+":\n"+(r.text||"(nessuna risposta)")); return; }
-    tot+=r.pts; max+=r.max;
+    tot+=r.pts; max+=r.max; sig.push(g.n+":"+r.pts+"/"+r.max);
     lines.push("Es. "+g.n+" – "+g.title+": "+r.pts+"/"+r.max + (r.det.length?"\n   - "+r.det.join("\n   - "):""));
   });
   if(!state.submittedAt){ state.submittedAt=new Date().toISOString(); state.submitted=true; save(); }
   var when=new Date(state.submittedAt);
+  var start=state.startedAt?new Date(state.startedAt):when;
+  var mins=Math.max(0,Math.round((when-start)/60000));
   var dec=Math.round(tot/max*20)/2;
   var decStr=String(dec).replace(".",",");
+  var code=sign([name,cls,tot+"/"+max,String(mins),sig.join(",")]);
   document.getElementById("bigScore").textContent=tot+" / "+max;
   document.getElementById("subScore").textContent="equivale a circa "+decStr+" su 10 (esclusi gli esercizi 9, 10 e 12)";
-  var rep="VERIFICA – Giocare nel Medioevo (Modulo C, morfologia)\n"+
+  var head="VERIFICA – Giocare nel Medioevo (Modulo C, morfologia)\n"+
     "Studente: "+name+"\nClasse: "+cls+"\nConsegnata il: "+when.toLocaleString("it-IT")+"\n"+
-    "Punteggio automatico: "+tot+"/"+max+" (circa "+decStr+"/10)\n\n"+
-    "DETTAGLIO\n"+lines.join("\n")+"\n\nRISPOSTE APERTE (da correggere)\n"+opens.join("\n\n")+"\n";
-  document.getElementById("report").value=rep;
+    "Tempo impiegato: "+mins+" min\n"+
+    "Punteggio automatico: "+tot+"/"+max+" (circa "+decStr+"/10)\n"+
+    "Codice di controllo: "+code+"\n\n";
+  fullReport=head+"DETTAGLIO\n"+lines.join("\n")+"\n\nRISPOSTE APERTE (da correggere)\n"+opens.join("\n\n")+"\n";
+  document.getElementById("report").value=fullReport;
+  buildSendLinks(name, head, lines, opens);
   var res=document.getElementById("result"); res.classList.add("show");
   if(!auto) res.scrollIntoView({block:"start"});
 }
-btnSubmit.addEventListener("click",function(){ submit(false); });
+
+/* Email: Gmail web (funziona su Chromebook e computer della scuola) + app di posta */
+var MAXURL=7500;
+var pasteNote=document.getElementById("pasteNote"), needsPaste=false;
+function gmailUrl(subj, body){
+  return "https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(TEACHER)+"&su="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);
+}
+function mailtoUrl(subj, body){
+  return "mailto:"+TEACHER+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);
+}
+function buildSendLinks(name, head, lines, opens){
+  var subj="Verifica Giocare nel Medioevo – "+name+" "+document.getElementById("sclass").value.trim();
+  var scoresOnly=lines.map(function(l){ return l.split("\n")[0]; });
+  var tiers=[
+    {body:fullReport, paste:false},
+    {body:head+"PUNTEGGI\n"+scoresOnly.join("\n")+"\n\nRISPOSTE APERTE (da correggere)\n"+opens.join("\n\n")+"\n\nDETTAGLIO DEGLI ERRORI (incollato dallo studente):\n", paste:true},
+    {body:head+"PUNTEGGI\n"+scoresOnly.join("\n")+"\n\nRESOCONTO COMPLETO (incollato dallo studente):\n", paste:true}
+  ];
+  var pick=tiers[tiers.length-1];
+  for(var i=0;i<tiers.length;i++){ if(gmailUrl(subj,tiers[i].body).length<=MAXURL){ pick=tiers[i]; break; } }
+  document.getElementById("lnkGmail").href=gmailUrl(subj,pick.body);
+  document.getElementById("lnkMail").href=mailtoUrl(subj,pick.body);
+  needsPaste=pick.paste;
+  pasteNote.hidden=!needsPaste;
+  pasteNote.textContent="Le tue risposte sono lunghe: quando si apre il messaggio, porta il cursore in fondo e incolla (Ctrl+V, oppure tieni premuto e scegli Incolla). Il resoconto completo viene copiato quando premi il pulsante.";
+}
+function copyText(txt){
+  if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(txt);
+  return Promise.reject();
+}
+["lnkGmail","lnkMail"].forEach(function(id){
+  document.getElementById(id).addEventListener("click",function(){
+    copyText(fullReport).then(function(){ if(needsPaste) say("Resoconto copiato: incollalo nel messaggio."); },function(){});
+  });
+});
+
+btnSubmit.addEventListener("click",function(){
+  var name=document.getElementById("sname").value.trim(), cls=document.getElementById("sclass").value.trim();
+  if(!name||!cls){ errBox.textContent="Scrivi nome, cognome e classe in cima alla pagina prima di consegnare."; document.getElementById(name?"sclass":"sname").focus(); return; }
+  errBox.textContent="";
+  var empty=countEmpty();
+  var msg=(empty? "Ci sono ancora "+empty+(empty===1?" risposta vuota. ":" risposte vuote. "):"Hai risposto a tutte le domande. ")+
+    "Dopo la consegna non potrai più modificare le risposte.";
+  ask("Vuoi consegnare?", msg, "Consegna").then(function(ok){ if(ok) finalize(false); });
+});
 
 var toast=document.getElementById("toast");
-function say(t){ toast.textContent=t; setTimeout(function(){ if(toast.textContent===t) toast.textContent=""; },4000); }
+function say(t){ toast.textContent=t; setTimeout(function(){ if(toast.textContent===t) toast.textContent=""; },5000); }
 document.getElementById("btnCopy").addEventListener("click",function(){
-  var ta=document.getElementById("report"); var txt=ta.value;
-  function fallback(){ ta.removeAttribute("readonly"); ta.focus(); ta.select(); var ok=false; try{ ok=document.execCommand("copy"); }catch(e){} ta.setAttribute("readonly",""); say(ok?"Resoconto copiato.":"Seleziona il testo e copialo a mano (tieni premuto sul testo)."); }
-  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ say("Resoconto copiato."); }, fallback); } else fallback();
-});
-document.getElementById("btnMail").addEventListener("click",function(){
-  var name=document.getElementById("sname").value.trim();
-  var url="mailto:?subject="+encodeURIComponent("Verifica Giocare nel Medioevo – "+name)+"&body="+encodeURIComponent(document.getElementById("report").value);
-  var w=null; try{ w=window.open(url,"_blank"); }catch(e){}
-  if(!w){ try{ window.top.location.href=url; }catch(e){ say("L’email non si apre da qui: copia il resoconto e incollalo in un messaggio."); } }
+  var ta=document.getElementById("report");
+  function fallback(){
+    ta.closest("details").open=true;
+    ta.removeAttribute("readonly"); ta.focus(); ta.select(); var ok=false; try{ ok=document.execCommand("copy"); }catch(e){} ta.setAttribute("readonly","");
+    say(ok?"Resoconto copiato.":"Seleziona il testo e copialo a mano (tieni premuto sul testo).");
+  }
+  copyText(fullReport).then(function(){ say("Resoconto copiato."); }, fallback);
 });
 
 var downloads=null;
@@ -540,19 +698,40 @@ if(window.claude && typeof window.claude.use==="function"){
 document.getElementById("btnDownload").addEventListener("click",function(){
   if(!downloads) return;
   var name=(document.getElementById("sname").value.trim()||"studente").replace(/[^\p{L}\p{N} _-]/gu,"").replace(/\s+/g,"_");
-  downloads.save({filename:"verifica_medioevo_"+name+".txt",data:document.getElementById("report").value}).then(function(){ say("Resoconto scaricato."); },function(e){
+  downloads.save({filename:"verifica_medioevo_"+name+".txt",data:fullReport}).then(function(){ say("Resoconto scaricato."); },function(e){
     if(e && (e.code==="unavailable"||e.code==="not_granted")) document.getElementById("btnDownload").hidden=true;
     else if(!(e && e.code==="declined")) say("Download non riuscito: usa “Copia il resoconto”.");
   });
 });
 
-document.getElementById("btnReset").addEventListener("click",function(){
-  if(!confirm("Cancellare tutte le risposte e ricominciare da capo?")) return;
-  try{ localStorage.removeItem(KEY); }catch(e){}
-  location.reload();
+btnReset.addEventListener("click",function(){
+  if(state.submitted) return;
+  ask("Ricominciare da capo?","Tutte le risposte scritte finora verranno cancellate.","Cancella tutto").then(function(ok){
+    if(!ok) return;
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
 });
 
-if(state.submitted) submit(true);
+/* ---------- Controllo dell'insegnante ---------- */
+document.getElementById("btnChk").addEventListener("click",function(){
+  var out=document.getElementById("chkOut");
+  var txt=document.getElementById("chkIn").value.replace(/\r/g,"");
+  var top=txt.split(/RISPOSTE APERTE|RESOCONTO COMPLETO|DETTAGLIO DEGLI ERRORI/)[0];
+  function g(re){ var m=top.match(re); return m?m[1].trim():null; }
+  var name=g(/^[>\s]*Studente:[ \t]*(.+)$/m), cls=g(/^[>\s]*Classe:[ \t]*(.+)$/m);
+  var mins=g(/^[>\s]*Tempo impiegato:\s*(\d+)/m), code=g(/Codice di controllo:\s*([0-9A-F]{4}-[0-9A-F]{4})/i);
+  var sc=top.match(/^[>\s]*Punteggio automatico:\s*(\d+)\s*\/\s*(\d+)/m);
+  var ex=[], seen={}, re=/^[>\s]*Es\.\s*(\d+)\s+\S+\s+.*?:\s*(\d+)\s*\/\s*(\d+)\s*$/gm, m;
+  while((m=re.exec(top))){ if(!seen[m[1]]){ seen[m[1]]=1; ex.push(m[1]+":"+m[2]+"/"+m[3]); } }
+  out.className="chk";
+  if(!code||!name||!cls||!sc||mins==null){ out.className="chk no"; out.textContent="Non trovo tutti i dati (studente, classe, tempo, punteggio, codice di controllo). Incolla il testo completo dell’email."; return; }
+  var exp=sign([name,cls,sc[1]+"/"+sc[2],mins,ex.join(",")]);
+  if(exp===code.toUpperCase()){ out.className="chk ok"; out.textContent="Codice corretto: nome, classe, punteggi e tempo ("+mins+" min) corrispondono alla consegna originale."; }
+  else { out.className="chk no"; out.textContent="Il codice non corrisponde: nome, classe o punteggi potrebbero essere stati modificati dopo la consegna."; }
+});
+
+if(state.submitted) finalize(true);
 })();
 </script>
 </body>
