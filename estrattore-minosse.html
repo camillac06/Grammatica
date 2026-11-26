@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Il Giudizio di Minosse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  /* =========================================================
+     COLORI (si cambiano qui, in un solo posto)
+     ========================================================= */
+  :root {
+    --nero: #070203;
+    --brace: #1a0606;
+    --sangue: #8b0f0f;
+    --fuoco: #ff4a1c;
+    --oro: #d9a441;
+    --oro-chiaro: #f3d27a;
+    --cenere: #b9a79a;
+    --testo: #f1e4d4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; min-height: 100%; }
+
+  body {
+    background:
+      radial-gradient(ellipse at 50% 35%, #3a0a07 0%, #1a0606 40%, var(--nero) 80%);
+    background-color: var(--nero);
+    color: var(--testo);
+    font-family: "Cinzel", Georgia, serif;
+    overflow-x: hidden;
+    padding: 16px;
+  }
+
+  /* ---------- braci che salgono ---------- */
+  #braci { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .brace {
+    position: absolute; bottom: -10px;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--fuoco);
+    box-shadow: 0 0 8px 2px rgba(255, 90, 30, .8);
+    animation: sali linear infinite;
+    opacity: 0;
+  }
+  @keyframes sali {
+    0%   { transform: translate(0, 0); opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translate(var(--deriva), -105vh); opacity: 0; }
+  }
+
+  main { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+
+  /* ---------- intestazione ---------- */
+  header { text-align: center; }
+  h1 {
+    font-family: "Cinzel Decorative", "Cinzel", serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 5vw, 3.4rem);
+    margin: .2em 0 0;
+    letter-spacing: .04em;
+    color: var(--oro-chiaro);
+    text-shadow: 0 0 18px rgba(255, 74, 28, .55), 0 2px 0 #000;
+  }
+  .citazione {
+    font-style: italic; color: var(--cenere);
+    font-size: clamp(.85rem, 2vw, 1.05rem);
+    margin: .4em 0 0;
+  }
+  .materia {
+    display: inline-block; margin-top: .6em;
+    padding: .25em 1em; border: 1px solid var(--oro); border-radius: 999px;
+    color: var(--oro); font-size: .85rem; letter-spacing: .2em; text-transform: uppercase;
+  }
+
+  /* ---------- palcoscenico con Minosse ---------- */
+  .palco {
+    position: relative;
+    width: min(92vw, 470px);
+    margin: 8px auto 0;
+  }
+  .palco svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+  #occhi ellipse { transition: fill .4s, filter .4s; }
+  .giudizio #occhi ellipse { fill: #fff3c0; filter: url(#bagliore-forte); }
+  #occhi { animation: battito-ciglia 6s infinite; transform-origin: 200px 98px; }
+  @keyframes battito-ciglia {
+    0%, 46%, 50%, 100% { transform: scaleY(1); }
+    48% { transform: scaleY(.1); }
+  }
+
+  #coda {
+    fill: none; stroke: #2b0a08; stroke-width: 14; stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(255, 60, 20, .5));
+  }
+  #coda-squame {
+    fill: none; stroke: var(--sangue); stroke-width: 5; stroke-linecap: round;
+    stroke-dasharray: 2 9;
+  }
+  #globo { transition: filter .3s; }
+  .giudizio #globo { filter: url(#bagliore-forte); }
+
+  #numero {
+    font-family: "Cinzel Decorative", "Cinzel", serif;
+    font-weight: 900; font-size: 118px;
+    fill: var(--oro-chiaro);
+    text-anchor: middle; dominant-baseline: central;
+    paint-order: stroke; stroke: #300; stroke-width: 6;
+  }
+  #numero.rivelato { animation: rivela .9s ease-out; }
+  @keyframes rivela {
+    0% { transform: scale(2.4); opacity: 0; }
+    60% { transform: scale(.9); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  #numero { transform-box: fill-box; transform-origin: center; }
+
+  .scossa { animation: scossa .6s; }
+  @keyframes scossa {
+    0%, 100% { transform: translate(0, 0); }
+    15% { transform: translate(-9px, 4px); }
+    30% { transform: translate(8px, -6px); }
+    45% { transform: translate(-6px, -3px); }
+    60% { transform: translate(5px, 5px); }
+    80% { transform: translate(-2px, 2px); }
+  }
+
+  #lampo {
+    position: fixed; inset: 0; background: #ffdfb0; opacity: 0;
+    pointer-events: none; z-index: 50;
+  }
+  #lampo.on { animation: lampo .7s ease-out; }
+  @keyframes lampo { 0% { opacity: .85; } 100% { opacity: 0; } }
+
+  body.buio::before {
+    content: ""; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    z-index: 0; pointer-events: none; transition: opacity .5s;
+  }
+
+  .verdetto {
+    text-align: center; min-height: 3.4em;
+    font-size: clamp(1rem, 2.6vw, 1.35rem);
+    color: var(--oro-chiaro); margin: 4px 0 0;
+  }
+  .verdetto small { display: block; color: var(--cenere); font-size: .75em; font-style: italic; margin-top: .3em; }
+
+  /* ---------- chiamati ---------- */
+  .chiamati {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    min-height: 54px; margin: 10px 0 18px;
+  }
+  .chip {
+    display: flex; align-items: center; gap: .5em;
+    padding: .35em .9em .35em .45em;
+    background: linear-gradient(#3a0d0a, #1d0605);
+    border: 1px solid var(--oro); border-radius: 999px;
+    font-weight: 800; font-size: 1.05rem;
+    box-shadow: 0 0 14px rgba(255, 74, 28, .35);
+    animation: rivela-chip .5s ease-out;
+  }
+  .chip b {
+    display: grid; place-items: center;
+    width: 2.1em; height: 2.1em; border-radius: 50%;
+    background: var(--sangue); color: var(--oro-chiaro); font-size: 1.1rem;
+  }
+  .chip span { color: var(--cenere); font-weight: 400; font-size: .85rem; }
+  @keyframes rivela-chip { from { transform: scale(.4); opacity: 0; } }
+
+  /* ---------- comandi ---------- */
+  .comandi {
+    display: flex; flex-wrap: wrap; gap: 12px 18px; justify-content: center; align-items: center;
+    padding: 14px; border: 1px solid rgba(217, 164, 65, .35); border-radius: 14px;
+    background: rgba(10, 2, 2, .65);
+  }
+  .comandi label { display: flex; align-items: center; gap: 8px; font-size: .95rem; color: var(--cenere); }
+  select, input[type=range] { accent-color: var(--fuoco); }
+  select {
+    background: #200807; color: var(--testo); border: 1px solid var(--oro);
+    border-radius: 8px; padding: 6px 10px; font: inherit;
+  }
+
+  button {
+    font-family: "Cinzel", serif; font-weight: 800; cursor: pointer;
+    border-radius: 10px; border: 1px solid var(--oro);
+    background: #200807; color: var(--oro-chiaro);
+    padding: 10px 16px; font-size: .95rem;
+  }
+  button:hover { background: #2e0b09; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+
+  #evoca {
+    font-family: "Cinzel Decorative", serif; font-size: 1.2rem; letter-spacing: .05em;
+    padding: 14px 26px;
+    background: linear-gradient(#a3150e, #5a0805);
+    border-color: var(--oro-chiaro);
+    box-shadow: 0 0 22px rgba(255, 74, 28, .55), inset 0 1px 0 rgba(255,255,255,.2);
+    color: #fff3d6;
+  }
+  #evoca:hover:not(:disabled) { filter: brightness(1.15); }
+
+  /* ---------- griglia delle anime ---------- */
+  h2 {
+    text-align: center; font-weight: 600; color: var(--oro);
+    font-size: 1rem; letter-spacing: .25em; text-transform: uppercase;
+    margin: 26px 0 4px;
+  }
+  .legenda { text-align: center; color: var(--cenere); font-size: .82rem; margin: 0 0 12px; }
+
+  #griglia {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, 64px);
+    justify-content: center;
+    max-width: 760px; margin: 0 auto;
+  }
+  .anima {
+    position: relative; aspect-ratio: 1;
+    display: grid; place-items: center;
+    font-size: 1.4rem; font-weight: 800;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 35%, #4a120c, #1a0504 75%);
+    border: 2px solid #6d1d12; color: var(--testo);
+    user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    touch-action: manipulation;
+    transition: transform .15s, opacity .3s;
+    padding: 0;
+  }
+  .anima:hover { transform: scale(1.07); }
+  .anima.assente { opacity: .35; text-decoration: line-through; border-style: dashed; }
+  .anima.estratto {
+    background: radial-gradient(circle at 50% 35%, #ffb347, #b3220c 70%);
+    border-color: var(--oro-chiaro); color: #2a0402;
+    box-shadow: 0 0 16px rgba(255, 120, 40, .8);
+  }
+  .anima.lampeggia { box-shadow: 0 0 0 3px var(--oro-chiaro), 0 0 20px var(--fuoco); }
+  /* puntino discreto: lo nota solo chi sa dove guardare */
+  body.puntino .anima.segreto::after {
+    content: ""; position: absolute; right: 18%; bottom: 14%;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(255, 255, 255, .22);
+  }
+
+  footer {
+    text-align: center; color: #5d4a40; font-size: .8rem; margin: 30px 0 10px;
+  }
+  #sigillo { cursor: default; font-size: 1.1rem; padding: 0 6px; user-select: none; }
+
+  /* ---------- pannello segreto ---------- */
+  #pannello {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(0, 0, 0, .9);
+    display: none; overflow-y: auto; padding: 16px;
+  }
+  #pannello.aperto { display: block; }
+  .scheda {
+    max-width: 640px; margin: 20px auto; padding: 20px;
+    background: #140504; border: 1px solid var(--oro); border-radius: 14px;
+    font-family: system-ui, sans-serif; color: var(--testo);
+  }
+  .scheda h3 { font-family: "Cinzel", serif; color: var(--oro-chiaro); margin: 18px 0 6px; }
+  .scheda h3:first-child { margin-top: 0; }
+  .scheda p { color: var(--cenere); font-size: .9rem; margin: 4px 0 10px; line-height: 1.45; }
+  .mini-griglia {
+    display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  }
+  .mini-griglia button {
+    font-family: system-ui, sans-serif; padding: 8px 0; font-size: 1rem; border-radius: 8px;
+    border-color: #5b2a20; color: var(--testo); background: #240a08;
+  }
+  .mini-griglia button.on { background: #7a1a10; border-color: var(--oro-chiaro); color: #fff; }
+  .scheda ul { color: var(--cenere); font-size: .9rem; padding-left: 1.2em; line-height: 1.5; }
+  .scheda kbd {
+    background: #2b0d0a; border: 1px solid #5b2a20; border-radius: 4px; padding: 0 5px;
+    font-size: .85em;
+  }
+  .riga-fondo { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 18px; align-items: center; }
+
+  @media (max-width: 520px) {
+    #griglia { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .anima { font-size: 1.15rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .brace, #occhi { animation: none; }
+  }
+</style>
+</head>
+<body class="puntino">
+<div id="braci"></div>
+<div id="lampo"></div>
+
+<main>
+  <header>
+    <h1>Il Giudizio di Minosse</h1>
+    <p class="citazione">«Stavvi Minòs orribilmente, e ringhia: essamina le colpe ne l'intrata; giudica e manda secondo ch'avvinghia.»</p>
+    <span class="materia">⚔ Interrogazione di Epica ⚔</span>
+  </header>
+
+  <!-- ====== MINOSSE (disegno in SVG) ====== -->
+  <div class="palco" id="palco">
+    <svg viewBox="0 0 400 510" aria-label="Minosse con la coda attorcigliata intorno al globo del giudizio">
+      <defs>
+        <radialGradient id="grad-globo" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#ff7a2e"/>
+          <stop offset="45%" stop-color="#a3180c"/>
+          <stop offset="100%" stop-color="#2a0402"/>
+        </radialGradient>
+        <radialGradient id="grad-occhio" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff6b0"/>
+          <stop offset="60%" stop-color="#ff5a10"/>
+          <stop offset="100%" stop-color="#7a0a00"/>
+        </radialGradient>
+        <linearGradient id="grad-corona" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f3d27a"/>
+          <stop offset="100%" stop-color="#8a5a12"/>
+        </linearGradient>
+        <filter id="bagliore" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="bagliore-forte" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="9" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- testa di Minosse -->
+      <g id="testa">
+        <!-- corna -->
+        <path d="M128 70 C 95 40, 92 8, 110 -6 C 108 22, 125 45, 150 58 Z" fill="#2a1410" stroke="#5b2a20" stroke-width="2"/>
+        <path d="M272 70 C 305 40, 308 8, 290 -6 C 292 22, 275 45, 250 58 Z" fill="#2a1410" stroke="#5b2a20" stroke-width="2"/>
+        <!-- volto -->
+        <path d="M135 62 Q 200 40 265 62 L 262 120 Q 250 168 200 182 Q 150 168 138 120 Z"
+              fill="#140404" stroke="#6d1d12" stroke-width="3"/>
+        <!-- corona -->
+        <path d="M140 64 L 146 26 L 165 50 L 182 16 L 200 46 L 218 16 L 235 50 L 254 26 L 260 64 Q 200 48 140 64 Z"
+              fill="url(#grad-corona)" stroke="#3a2205" stroke-width="2"/>
+        <circle cx="200" cy="56" r="5" fill="#b3150c"/>
+        <!-- sopracciglia furiose -->
+        <path d="M156 84 L 190 96" stroke="#000" stroke-width="7" stroke-linecap="round"/>
+        <path d="M244 84 L 210 96" stroke="#000" stroke-width="7" stroke-linecap="round"/>
+        <!-- occhi -->
+        <g id="occhi" filter="url(#bagliore)">
+          <ellipse cx="176" cy="102" rx="13" ry="7" fill="url(#grad-occhio)" transform="rotate(14 176 102)"/>
+          <ellipse cx="224" cy="102" rx="13" ry="7" fill="url(#grad-occhio)" transform="rotate(-14 224 102)"/>
+        </g>
+        <!-- bocca che ringhia -->
+        <path d="M168 142 Q 200 128 232 142 Q 200 160 168 142 Z" fill="#2a0000" stroke="#6d1d12" stroke-width="2"/>
+        <path d="M174 140 L 180 150 L 186 137 L 193 151 L 200 135 L 207 151 L 214 137 L 220 150 L 226 140"
+              fill="none" stroke="#e8d9b0" stroke-width="2.4" stroke-linejoin="round"/>
+      </g>
+
+      <!-- globo del giudizio -->
+      <circle id="globo" cx="200" cy="330" r="98" fill="url(#grad-globo)" stroke="#d9a441" stroke-width="3"/>
+      <circle cx="200" cy="330" r="86" fill="none" stroke="rgba(243,210,122,.35)" stroke-width="1" stroke-dasharray="3 6"/>
+      <text id="numero" x="200" y="334">?</text>
+
+      <!-- coda (disegnata dal programma) -->
+      <path id="coda" d=""/>
+      <path id="coda-squame" d=""/>
+      <path id="punta" d="" fill="#2b0a08" stroke="#8b0f0f" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="verdetto" id="verdetto">Premi «Evoca il giudizio» … se ne hai il coraggio.</div>
+
+  <div class="chiamati" id="chiamati" aria-live="polite"></div>
+
+  <!-- ====== COMANDI ====== -->
+  <div class="comandi">
+    <label>Anime in classe
+      <select id="quanti-studenti"></select>
+    </label>
+    <label>Da chiamare
+      <select id="quanti-estrarre">
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+      </select>
+    </label>
+    <button id="evoca">🔥 Evoca il giudizio</button>
+    <button id="azzera" title="Rimette in gioco tutti i numeri già estratti">↺ Nuovo giro</button>
+    <label title="Volume dei suoni">🔊
+      <input type="range" id="volume" min="0" max="1" step="0.05" value="0.8">
+    </label>
+  </div>
+
+  <h2>Le anime in attesa</h2>
+  <p class="legenda">Tocca un numero per segnarlo assente (barrato). Tocca di nuovo per riammetterlo.</p>
+  <div id="griglia"></div>
+
+  <footer>
+    <span id="sigillo">✠</span> Inferno, canto V · «giudica e manda secondo ch'avvinghia»
+  </footer>
+</main>
+
+<!-- ====== PANNELLO SEGRETO (solo per l'insegnante) ====== -->
+<div id="pannello" role="dialog" aria-modal="true" aria-label="Impostazioni">
+  <div class="scheda">
+    <h3>Esclusi fissi (PDP)</h3>
+    <p>Questi numeri non verranno mai estratti, ma nella pagina appaiono identici agli altri e continuano a comparire nell'animazione. Restano salvati su questo computer/tablet.</p>
+    <div class="mini-griglia" id="griglia-pdp"></div>
+
+    <h3>Esclusi solo per oggi</h3>
+    <p>Come sopra, ma valgono solo finché la pagina resta aperta (ricaricando la pagina si azzerano).</p>
+    <div class="mini-griglia" id="griglia-oggi"></div>
+
+    <h3>Come escludere di nascosto, sul momento</h3>
+    <ul>
+      <li><b>Clic destro</b> su un numero della griglia (al computer), oppure</li>
+      <li><b>tieni premuto</b> il dito su un numero per circa un secondo (su LIM o tablet).</li>
+      <li>Ripeti lo stesso gesto per riammetterlo.</li>
+      <li>Per riaprire questo pannello: <b>tre clic veloci</b> sulla crocetta ✠ in fondo alla pagina, oppure <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>. Chiudi con <kbd>Esc</kbd>.</li>
+      <li>Consiglio: se puoi, apri questo pannello <i>prima</i> di proiettare la pagina.</li>
+    </ul>
+
+    <label style="display:flex;gap:8px;align-items:center;color:var(--cenere);font-size:.9rem">
+      <input type="checkbox" id="mostra-puntino" checked>
+      Mostra un puntino quasi invisibile sui numeri esclusi (per ricordartelo tu)
+    </label>
+
+    <div class="riga-fondo">
+      <button id="svuota-pdp" type="button">Togli tutti i PDP</button>
+      <button id="chiudi-pannello" type="button">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =================================================================
+   IL GIUDIZIO DI MINOSSE — estrattore di numeri per interrogazioni
+   Tutto il programma è qui sotto, diviso in sezioni commentate.
+   ================================================================= */
+
+const MAX = 25;
+
+/* ---------- 1. MEMORIA (cosa ricorda la pagina) ---------- */
+// "localStorage" è un piccolo archivio del browser: resta anche chiudendo la pagina.
+function leggi(chiave, predefinito) {
+  try {
+    const v = localStorage.getItem(chiave);
+    return v === null ? predefinito : JSON.parse(v);
+  } catch (e) { return predefinito; }
+}
+function salva(chiave, valore) {
+  try { localStorage.setItem(chiave, JSON.stringify(valore)); } catch (e) { /* niente */ }
+}
+
+const stato = {
+  studenti: leggi("minosse.studenti", 25),
+  daEstrarre: leggi("minosse.daEstrarre", 1),
+  pdp: new Set(leggi("minosse.pdp", [])),     // esclusi fissi (segreti)
+  oggi: new Set(),                            // esclusi segreti solo per oggi
+  assenti: new Set(),                         // esclusi visibili (barrati)
+  estratti: [],                               // già chiamati in questo giro
+  inCorso: false,
+  volume: leggi("minosse.volume", 0.8),
+  puntino: leggi("minosse.puntino", true),
+};
+
+/* ---------- 2. NUMERO CASUALE "VERO" ---------- */
+function casuale(n) { // da 0 a n-1
+  const a = new Uint32Array(1);
+  crypto.getRandomValues(a);
+  return a[0] % n;
+}
+
+/* ---------- 3. CHI PUÒ ESSERE ESTRATTO ---------- */
+function numeriInClasse() {
+  return Array.from({ length: stato.studenti }, (_, i) => i + 1);
+}
+function escluso(n) { return stato.pdp.has(n) || stato.oggi.has(n); }
+function eleggibili() {   // i veri candidati
+  return numeriInClasse().filter(n =>
+    !escluso(n) && !stato.assenti.has(n) && !stato.estratti.includes(n));
+}
+function perAnimazione() { // quelli che "lampeggiano": include anche gli esclusi segreti, così nessuno nota nulla
+  const lista = numeriInClasse().filter(n => !stato.assenti.has(n) && !stato.estratti.includes(n));
+  return lista.length ? lista : numeriInClasse();
+}
+
+/* =================================================================
+   4. SUONI SPAVENTOSI (creati al momento, senza file audio)
+   ================================================================= */
+const A = { ctx: null, master: null, riverbero: null };
+
+function avviaAudio() {
+  if (A.ctx) { if (A.ctx.state === "suspended") A.ctx.resume(); return; }
+  const C = new (window.AudioContext || window.webkitAudioContext)();
+  A.ctx = C;
+  A.master = C.createGain();
+  A.master.gain.value = stato.volume;
+  A.master.connect(C.destination);
+  // riverbero da caverna infernale
+  A.riverbero = C.createConvolver();
+  A.riverbero.buffer = rispostaCaverna(C, 4, 2.2);
+  const r = C.createGain(); r.gain.value = 0.7;
+  A.riverbero.connect(r); r.connect(A.master);
+}
+function rispostaCaverna(C, secondi, decadimento) {
+  const len = C.sampleRate * secondi;
+  const buf = C.createBuffer(2, len, C.sampleRate);
+  for (let c = 0; c < 2; c++) {
+    const d = buf.getChannelData(c);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decadimento);
+  }
+  return buf;
+}
+function rumore(secondi) {
+  const C = A.ctx, len = C.sampleRate * secondi;
+  const buf = C.createBuffer(1, len, C.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return buf;
+}
+function uscita(nodo, eco = 0.5) {
+  const s = A.ctx.createGain(); s.gain.value = 1;
+  nodo.connect(s); s.connect(A.master);
+  const e = A.ctx.createGain(); e.gain.value = eco;
+  nodo.connect(e); e.connect(A.riverbero);
+}
+function distorsione(quanto) {
+  const n = 1024, curva = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const x = i * 2 / n - 1;
+    curva[i] = (1 + quanto) * x / (1 + quanto * Math.abs(x));
+  }
+  const ws = A.ctx.createWaveShaper(); ws.curve = curva; return ws;
+}
+function sfuma(param, t) {
+  if (param.cancelAndHoldAtTime) param.cancelAndHoldAtTime(t);
+  else param.cancelScheduledValues(t);
+  param.setTargetAtTime(0, t, 0.3);
+}
+
+// Bordone cupo + vento infernale che cresce di tensione. Restituisce una funzione per fermarlo.
+function bordone() {
+  const C = A.ctx, t = C.currentTime;
+  const g = C.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.35, t + 1.5);
+  const lp = C.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 200; lp.Q.value = 6;
+  const lfo = C.createOscillator(); lfo.frequency.value = 0.35;
+  const lfoG = C.createGain(); lfoG.gain.value = 90;
+  lfo.connect(lfoG); lfoG.connect(lp.frequency);
+  const osc = [41.2, 41.7, 61.8, 58.3].map(f => {
+    const o = C.createOscillator(); o.type = "sawtooth"; o.frequency.value = f;
+    o.frequency.linearRampToValueAtTime(f * 1.08, t + 6); // la tensione sale
+    o.connect(lp); o.start(t); return o;
+  });
+  lp.connect(g);
+  // vento
+  const v = C.createBufferSource(); v.buffer = rumore(2); v.loop = true;
+  const bp = C.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 500; bp.Q.value = 1.4;
+  const vl = C.createOscillator(); vl.frequency.value = 0.22;
+  const vlG = C.createGain(); vlG.gain.value = 320;
+  vl.connect(vlG); vlG.connect(bp.frequency);
+  const vG = C.createGain(); vG.gain.value = 0.28;
+  v.connect(bp); bp.connect(vG); vG.connect(g);
+  uscita(g, 0.6);
+  lfo.start(t); v.start(t); vl.start(t);
+  return () => {
+    const t2 = C.currentTime;
+    sfuma(g.gain, t2);
+    [...osc, lfo, v, vl].forEach(o => { try { o.stop(t2 + 1.6); } catch (e) {} });
+  };
+}
+
+// Battito del cuore che accelera
+function colpoCuore(t, forza) {
+  const C = A.ctx;
+  const o = C.createOscillator(); o.type = "sine";
+  o.frequency.setValueAtTime(95, t);
+  o.frequency.exponentialRampToValueAtTime(34, t + 0.16);
+  const g = C.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(forza, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+  o.connect(g); uscita(g, 0.15); o.start(t); o.stop(t + 0.3);
+}
+function battitoCuore(durata) {
+  const ora = A.ctx.currentTime;
+  let t = ora + 0.1, pausa = 0.95;
+  while (t < ora + durata) {
+    colpoCuore(t, 0.9); colpoCuore(t + 0.19, 0.55);
+    t += pausa; pausa = Math.max(0.36, pausa * 0.86);
+  }
+}
+
+// Piccolo "toc" d'osso a ogni numero che scorre
+function toc() {
+  const C = A.ctx, t = C.currentTime;
+  const o = C.createOscillator(); o.type = "triangle";
+  o.frequency.setValueAtTime(380 + Math.random() * 120, t);
+  o.frequency.exponentialRampToValueAtTime(120, t + 0.05);
+  const g = C.createGain();
+  g.gain.setValueAtTime(0.18, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+  o.connect(g); uscita(g, 0.35); o.start(t); o.stop(t + 0.08);
+}
+
+// Sferzata della coda
+function frustata() {
+  const C = A.ctx, t = C.currentTime;
+  const s = C.createBufferSource(); s.buffer = rumore(0.6);
+  const bp = C.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 3;
+  bp.frequency.setValueAtTime(200, t);
+  bp.frequency.exponentialRampToValueAtTime(3200, t + 0.35);
+  const g = C.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.8, t + 0.3);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+  s.connect(bp); bp.connect(g); uscita(g, 0.5); s.start(t); s.stop(t + 0.6);
+  // schiocco finale
+  const s2 = C.createBufferSource(); s2.buffer = rumore(0.1);
+  const hp = C.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 2000;
+  const g2 = C.createGain();
+  g2.gain.setValueAtTime(0.9, t + 0.36);
+  g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.42);
+  s2.connect(hp); hp.connect(g2); uscita(g2, 0.8); s2.start(t + 0.36);
+}
+
+// Ringhio di Minosse
+function ringhio(durata = 1.9) {
+  const C = A.ctx, t = C.currentTime;
+  const ws = distorsione(40);
+  const lp = C.createBiquadFilter(); lp.type = "lowpass";
+  lp.frequency.setValueAtTime(1100, t);
+  lp.frequency.linearRampToValueAtTime(380, t + durata);
+  const am = C.createGain(); am.gain.value = 0.55;
+  const tremolo = C.createOscillator(); tremolo.type = "square"; tremolo.frequency.value = 27;
+  const trG = C.createGain(); trG.gain.value = 0.45;
+  tremolo.connect(trG); trG.connect(am.gain);
+  const env = C.createGain();
+  env.gain.setValueAtTime(0.0001, t);
+  env.gain.exponentialRampToValueAtTime(0.55, t + 0.15);
+  env.gain.setValueAtTime(0.55, t + durata * 0.6);
+  env.gain.exponentialRampToValueAtTime(0.0001, t + durata);
+  [58, 87, 61].forEach((f, i) => {
+    const o = C.createOscillator(); o.type = "sawtooth";
+    o.frequency.setValueAtTime(f, t);
+    o.frequency.linearRampToValueAtTime(f * 1.35, t + 0.35);
+    o.frequency.linearRampToValueAtTime(f * 0.8, t + durata);
+    o.detune.value = i * 12;
+    o.connect(ws); o.start(t); o.stop(t + durata + 0.1);
+  });
+  // respiro rauco
+  const r = C.createBufferSource(); r.buffer = rumore(durata);
+  const rbp = C.createBiquadFilter(); rbp.type = "bandpass"; rbp.frequency.value = 260; rbp.Q.value = 2.5;
+  const rG = C.createGain(); rG.gain.value = 0.9;
+  r.connect(rbp); rbp.connect(rG); rG.connect(ws);
+  ws.connect(lp); lp.connect(am); am.connect(env); uscita(env, 0.55);
+  tremolo.start(t); tremolo.stop(t + durata + 0.1); r.start(t);
+}
+
+// Tuono / boato
+function tuono() {
+  const C = A.ctx, t = C.currentTime;
+  const s = C.createBufferSource(); s.buffer = rumore(4);
+  const lp = C.createBiquadFilter(); lp.type = "lowpass";
+  lp.frequency.setValueAtTime(900, t);
+  lp.frequency.exponentialRampToValueAtTime(70, t + 3.2);
+  const g = C.createGain();
+  g.gain.setValueAtTime(1.2, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 3.6);
+  s.connect(lp); lp.connect(g); uscita(g, 0.7); s.start(t); s.stop(t + 4);
+  const o = C.createOscillator(); o.type = "sine";
+  o.frequency.setValueAtTime(52, t); o.frequency.exponentialRampToValueAtTime(26, t + 2.5);
+  const og = C.createGain();
+  og.gain.setValueAtTime(0.9, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 2.6);
+  o.connect(og); uscita(og, 0.2); o.start(t); o.stop(t + 2.7);
+}
+
+// Coro infernale dissonante
+function coro() {
+  const C = A.ctx, t = C.currentTime;
+  [110, 155.6, 164.8, 233.1, 311.1].forEach((f, i) => {
+    const o = C.createOscillator(); o.type = i % 2 ? "triangle" : "sawtooth";
+    o.frequency.value = f;
+    const vib = C.createOscillator(); vib.frequency.value = 4.5 + i * 0.3;
+    const vg = C.createGain(); vg.gain.value = f * 0.012;
+    vib.connect(vg); vg.connect(o.frequency);
+    const lp = C.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1400;
+    const g = C.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.07, t + 0.5);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 4.5);
+    o.connect(lp); lp.connect(g); uscita(g, 1);
+    o.start(t); vib.start(t); o.stop(t + 4.6); vib.stop(t + 4.6);
+  });
+}
+
+function suona(fn, ...arg) { if (A.ctx && stato.volume > 0) { try { fn(...arg); } catch (e) {} } }
+
+/* =================================================================
+   5. GRAFICA: coda, braci, griglia
+   ================================================================= */
+function disegnaCoda(giri) {
+  const cx = 200, cy = 330, punti = [], passi = 260;
+  const inizio = -Math.PI / 2 - 0.5; // la coda parte da dietro la testa
+  for (let i = 0; i <= passi; i++) {
+    const p = i / passi;
+    const ang = inizio + p * giri * Math.PI * 2;
+    const r = 172 - p * 58 + Math.sin(p * 40) * 3;
+    punti.push([cx + r * Math.cos(ang), cy + r * Math.sin(ang)]);
+  }
+  // attacco dalla testa
+  const d = "M200 175 Q 175 160 " + punti[0][0].toFixed(1) + " " + punti[0][1].toFixed(1) + " " +
+    punti.slice(1).map(q => "L" + q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" ");
+  const coda = document.getElementById("coda");
+  const squame = document.getElementById("coda-squame");
+  coda.setAttribute("d", d); squame.setAttribute("d", d);
+  // punta a freccia
+  const [x1, y1] = punti[passi - 3], [x2, y2] = punti[passi];
+  const a = Math.atan2(y2 - y1, x2 - x1);
+  const pt = (l, da) => [x2 + l * Math.cos(a + da), y2 + l * Math.sin(a + da)];
+  const [px, py] = pt(18, 0), [lx, ly] = pt(10, 2.3), [rx, ry] = pt(10, -2.3);
+  document.getElementById("punta").setAttribute("d",
+    `M${px} ${py} L${lx} ${ly} L${x2} ${y2} L${rx} ${ry} Z`);
+  return [coda, squame];
+}
+
+function animaCoda(giri, durataMs) {
+  const tratti = disegnaCoda(giri);
+  const punta = document.getElementById("punta");
+  punta.style.transition = "none"; punta.style.opacity = 0;
+  tratti.forEach(el => {
+    const L = el.getTotalLength();
+    el.style.transition = "none";
+    el.style.strokeDasharray = el.id === "coda" ? L : "";
+    el.style.strokeDashoffset = L;
+    el.style.opacity = el.id === "coda" ? 1 : 0;
+    el.getBoundingClientRect(); // obbliga il browser ad applicare subito
+    el.style.transition = `stroke-dashoffset ${durataMs}ms ease-in-out, opacity .6s`;
+    el.style.strokeDashoffset = 0;
+  });
+  setTimeout(() => {
+    document.getElementById("coda-squame").style.opacity = 1;
+    punta.style.transition = "opacity .3s"; punta.style.opacity = 1;
+  }, durataMs);
+}
+
+function creaBraci() {
+  const box = document.getElementById("braci");
+  for (let i = 0; i < 35; i++) {
+    const b = document.createElement("span");
+    b.className = "brace";
+    b.style.left = Math.random() * 100 + "%";
+    b.style.animationDuration = 6 + Math.random() * 9 + "s";
+    b.style.animationDelay = -Math.random() * 15 + "s";
+    b.style.setProperty("--deriva", (Math.random() * 120 - 60) + "px");
+    const s = 2 + Math.random() * 4;
+    b.style.width = b.style.height = s + "px";
+    box.appendChild(b);
+  }
+}
+
+const griglia = document.getElementById("griglia");
+
+function disegnaGriglia() {
+  griglia.innerHTML = "";
+  numeriInClasse().forEach(n => {
+    const b = document.createElement("button");
+    b.className = "anima";
+    b.textContent = n;
+    b.dataset.n = n;
+    b.type = "button";
+    collegaGesti(b, n);
+    griglia.appendChild(b);
+  });
+  aggiornaGriglia();
+}
+
+function aggiornaGriglia() {
+  griglia.querySelectorAll(".anima").forEach(b => {
+    const n = +b.dataset.n;
+    b.classList.toggle("assente", stato.assenti.has(n));
+    b.classList.toggle("estratto", stato.estratti.includes(n));
+    b.classList.toggle("segreto", escluso(n));
+  });
+  document.body.classList.toggle("puntino", stato.puntino);
+}
+
+/* Gesti sui numeri:
+   - clic normale  -> assente visibile (barrato)
+   - clic destro / pressione lunga -> esclusione SEGRETA per oggi */
+function collegaGesti(b, n) {
+  let timer = null, lungo = false, ultimoSegreto = 0;
+  const segreto = () => {
+    if (Date.now() - ultimoSegreto < 900) return; // evita doppio scatto
+    ultimoSegreto = Date.now();
+    if (stato.oggi.has(n)) stato.oggi.delete(n); else stato.oggi.add(n);
+    aggiornaGriglia(); disegnaPannello();
+  };
+  b.addEventListener("pointerdown", e => {
+    if (e.button !== 0) return;
+    lungo = false;
+    timer = setTimeout(() => { lungo = true; segreto(); }, 750);
+  });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(ev =>
+    b.addEventListener(ev, () => clearTimeout(timer)));
+  b.addEventListener("contextmenu", e => { e.preventDefault(); segreto(); });
+  b.addEventListener("click", () => {
+    if (lungo) { lungo = false; return; }
+    if (stato.inCorso) return;
+    if (stato.estratti.includes(n)) {
+      // ripensamento: rimette in gioco un numero già estratto
+      stato.estratti = stato.estratti.filter(x => x !== n);
+      disegnaChiamati();
+    } else if (stato.assenti.has(n)) stato.assenti.delete(n);
+    else stato.assenti.add(n);
+    aggiornaGriglia();
+  });
+}
+
+/* =================================================================
+   6. IL GIUDIZIO (l'estrazione vera e propria)
+   ================================================================= */
+const frasi = [
+  ["Minosse ha giudicato.", "«Vuolsi così colà dove si puote ciò che si vuole, e più non dimandare.»"],
+  ["«O tu che vieni al doloroso ospizio…»", "…preparati a raccontare le gesta degli eroi."],
+  ["Lasciate ogne speranza…", "…e aprite il libro di epica."],
+  ["Canta, o Diva, l'interrogazione!", "Le Muse ti assistano."],
+  ["Come Ulisse, affronta la prova.", "Nessuna sirena potrà salvarti."],
+  ["Achille ha il suo tallone…", "…tu hai l'interrogazione."],
+  ["Il fato è stato pronunciato.", "Nemmeno Zeus può cambiarlo."],
+  ["Enea discese agli Inferi.", "Ora tocca a te salire alla cattedra."],
+];
+
+const attesa = ms => new Promise(r => setTimeout(r, ms));
+const elNumero = document.getElementById("numero");
+const elVerdetto = document.getElementById("verdetto");
+const palco = document.getElementById("palco");
+
+async function unGiudizio(posizione, totale) {
+  const candidati = eleggibili();
+  if (!candidati.length) return false;
+  const scelto = candidati[casuale(candidati.length)];
+  const giri = 3 + casuale(6);
+
+  palco.classList.add("giudizio");
+  document.body.classList.add("buio");
+  elVerdetto.innerHTML = totale > 1
+    ? `Minosse esamina le colpe… <small>anima ${posizione} di ${totale}</small>`
+    : "Minosse esamina le colpe…";
+
+  let ferma = () => {};
+  if (A.ctx && stato.volume > 0) { try { ferma = bordone(); battitoCuore(4.6); } catch (e) {} }
+
+  setTimeout(() => { suona(frustata); animaCoda(giri, 3400); }, 500);
+
+  // i numeri scorrono, sempre più lenti
+  const pool = perAnimazione();
+  let pausa = 55, ultimo = null;
+  while (pausa < 400) {
+    let n;
+    do { n = pool[casuale(pool.length)]; } while (pool.length > 1 && n === ultimo);
+    ultimo = n;
+    elNumero.textContent = n;
+    illumina(n);
+    suona(toc);
+    await attesa(pausa);
+    pausa *= 1.075;
+  }
+  illumina(null);
+  elNumero.textContent = "";
+  await attesa(450); // silenzio prima della sentenza
+
+  // SENTENZA
+  ferma();
+  suona(tuono); suona(ringhio); suona(coro);
+  elNumero.textContent = scelto;
+  elNumero.classList.remove("rivelato"); void elNumero.getBBox(); elNumero.classList.add("rivelato");
+  const lampo = document.getElementById("lampo");
+  lampo.classList.remove("on"); void lampo.offsetWidth; lampo.classList.add("on");
+  document.body.classList.remove("scossa"); void document.body.offsetWidth; document.body.classList.add("scossa");
+
+  stato.estratti.push(scelto);
+  const [f1, f2] = frasi[casuale(frasi.length)];
+  elVerdetto.innerHTML = `${f1} <b style="color:#fff">Tocca al numero ${scelto}!</b>` +
+    `<small>${f2} · la coda si è avvinta ${giri} volte</small>`;
+  aggiornaGriglia(); disegnaChiamati();
+  palco.classList.remove("giudizio");
+  document.body.classList.remove("buio");
+  return true;
+}
+
+function illumina(n) {
+  griglia.querySelectorAll(".anima").forEach(b =>
+    b.classList.toggle("lampeggia", +b.dataset.n === n));
+}
+
+async function evoca() {
+  if (stato.inCorso) return;
+  avviaAudio();
+  if (!eleggibili().length) {
+    suona(ringhio, 1.4);
+    elVerdetto.innerHTML = "Non restano anime da giudicare. <small>Premi «Nuovo giro» per ricominciare.</small>";
+    return;
+  }
+  stato.inCorso = true;
+  bottoni(false);
+  const quanti = Math.min(stato.daEstrarre, eleggibili().length);
+  for (let i = 1; i <= quanti; i++) {
+    await unGiudizio(i, quanti);
+    if (i < quanti) await attesa(2600);
+  }
+  stato.inCorso = false;
+  bottoni(true);
+}
+
+function bottoni(attivi) {
+  ["evoca", "azzera", "quanti-studenti", "quanti-estrarre"].forEach(id =>
+    document.getElementById(id).disabled = !attivi);
+}
+
+function disegnaChiamati() {
+  const box = document.getElementById("chiamati");
+  box.innerHTML = "";
+  stato.estratti.forEach((n, i) => {
+    const c = document.createElement("div");
+    c.className = "chip";
+    c.innerHTML = `<b>${n}</b> ${i + 1}° <span>chiamato</span>`;
+    box.appendChild(c);
+  });
+}
+
+/* =================================================================
+   7. PANNELLO SEGRETO
+   ================================================================= */
+const pannello = document.getElementById("pannello");
+
+function disegnaPannello() {
+  [["griglia-pdp", stato.pdp, true], ["griglia-oggi", stato.oggi, false]].forEach(([id, insieme, fisso]) => {
+    const box = document.getElementById(id);
+    box.innerHTML = "";
+    for (let n = 1; n <= MAX; n++) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = n;
+      b.classList.toggle("on", insieme.has(n));
+      b.addEventListener("click", () => {
+        if (insieme.has(n)) insieme.delete(n); else insieme.add(n);
+        if (fisso) salva("minosse.pdp", [...stato.pdp]);
+        disegnaPannello(); aggiornaGriglia();
+      });
+      box.appendChild(b);
+    }
+  });
+  document.getElementById("mostra-puntino").checked = stato.puntino;
+}
+function apriPannello() { disegnaPannello(); pannello.classList.add("aperto"); }
+function chiudiPannello() { pannello.classList.remove("aperto"); }
+
+// tre clic veloci sulla crocetta ✠
+let clicSigillo = [];
+document.getElementById("sigillo").addEventListener("click", () => {
+  const ora = Date.now();
+  clicSigillo = clicSigillo.filter(t => ora - t < 800);
+  clicSigillo.push(ora);
+  if (clicSigillo.length >= 3) { clicSigillo = []; apriPannello(); }
+});
+document.addEventListener("keydown", e => {
+  if (e.altKey && e.shiftKey && e.code === "KeyM") { e.preventDefault(); apriPannello(); }
+  if (e.key === "Escape") chiudiPannello();
+});
+document.getElementById("chiudi-pannello").addEventListener("click", chiudiPannello);
+pannello.addEventListener("click", e => { if (e.target === pannello) chiudiPannello(); });
+document.getElementById("svuota-pdp").addEventListener("click", () => {
+  stato.pdp.clear(); salva("minosse.pdp", []); disegnaPannello(); aggiornaGriglia();
+});
+document.getElementById("mostra-puntino").addEventListener("change", e => {
+  stato.puntino = e.target.checked; salva("minosse.puntino", stato.puntino); aggiornaGriglia();
+});
+
+/* =================================================================
+   8. AVVIO
+   ================================================================= */
+const selStudenti = document.getElementById("quanti-studenti");
+for (let n = 1; n <= MAX; n++) selStudenti.add(new Option(n, n));
+selStudenti.value = stato.studenti;
+selStudenti.addEventListener("change", () => {
+  stato.studenti = +selStudenti.value;
+  salva("minosse.studenti", stato.studenti);
+  stato.estratti = stato.estratti.filter(n => n <= stato.studenti);
+  disegnaGriglia(); disegnaChiamati();
+});
+
+const selEstrarre = document.getElementById("quanti-estrarre");
+selEstrarre.value = stato.daEstrarre;
+selEstrarre.addEventListener("change", () => {
+  stato.daEstrarre = +selEstrarre.value; salva("minosse.daEstrarre", stato.daEstrarre);
+});
+
+const vol = document.getElementById("volume");
+vol.value = stato.volume;
+vol.addEventListener("input", () => {
+  stato.volume = +vol.value; salva("minosse.volume", stato.volume);
+  if (A.master) A.master.gain.value = stato.volume;
+});
+
+document.getElementById("evoca").addEventListener("click", evoca);
+document.getElementById("azzera").addEventListener("click", () => {
+  stato.estratti = [];
+  elNumero.textContent = "?";
+  elVerdetto.textContent = "Un nuovo giro di anime attende il giudizio.";
+  aggiornaGriglia(); disegnaChiamati();
+  avviaAudio(); suona(frustata);
+});
+
+creaBraci();
+disegnaGriglia();
+disegnaCoda(4);
+</script>
+</body>
+</html>
